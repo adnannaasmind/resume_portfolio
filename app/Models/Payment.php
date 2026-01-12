@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Payment extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'pricing_plan_id',
+        'subscription_id',
+        'provider',
+        'provider_payment_id',
+        'amount',
+        'currency',
+        'status',
+        'raw_response',
+        'paid_at',
+        'receipt_url',
+        'error_message',
+    ];
+
+    protected $casts = [
+        'raw_response' => 'array',
+        'paid_at' => 'datetime',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(PricingPlan::class, 'pricing_plan_id');
+    }
+
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
+}

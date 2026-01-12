@@ -1,0 +1,105 @@
+<div class="main-header">
+    <div class="main-header-logo">
+        <!-- Logo Header -->
+        <div class="logo-header" data-background-color="dark">
+            <a href="{{ route('admin.dashboard') }}" class="logo">
+                <h2 class="text-white fw-bold mb-0">ResumePro</h2>
+            </a>
+            <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                    <i class="gg-menu-right"></i>
+                </button>
+                <button class="btn btn-toggle sidenav-toggler">
+                    <i class="gg-menu-left"></i>
+                </button>
+            </div>
+            <button class="topbar-toggler more">
+                <i class="gg-more-vertical-alt"></i>
+            </button>
+        </div>
+        <!-- End Logo Header -->
+    </div>
+
+    <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+        <div class="container-fluid">
+            <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button type="submit" class="btn btn-search pe-1">
+                            <i class="fa fa-search search-icon"></i>
+                        </button>
+                    </div>
+                    <input type="text" placeholder="Search users, resumes..." class="form-control" />
+                </div>
+            </nav>
+
+            <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                <li class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                        aria-expanded="false" aria-haspopup="true">
+                        <i class="fa fa-search"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-search animated fadeIn">
+                        <form class="navbar-left navbar-form nav-search">
+                            <div class="input-group">
+                                <input type="text" placeholder="Search ..." class="form-control" />
+                            </div>
+                        </form>
+                    </ul>
+                </li>
+
+                <li class="nav-item topbar-user dropdown hidden-caret">
+                    <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
+                        <div class="avatar-sm">
+                            <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center">
+                                <strong>{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</strong>
+                            </div>
+                        </div>
+                        <span class="profile-username">
+                            <span class="op-7">Hi,</span>
+                            <span class="fw-bold">{{ auth()->user()->name }}</span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user animated fadeIn">
+                        <div class="dropdown-user-scroll scrollbar-outer">
+                            <li>
+                                <div class="user-box">
+                                    <div class="avatar-lg">
+                                        <div class="avatar-lg bg-primary text-white rounded d-flex align-items-center justify-content-center" style="font-size: 2rem;">
+                                            <strong>{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="u-text">
+                                        <h4>{{ auth()->user()->name }}</h4>
+                                        <p class="text-muted">{{ auth()->user()->email }}</p>
+                                        <a href="{{ route('profile.edit') }}" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                    <i class="fas fa-user me-2"></i> My Profile
+                                </a>
+                                <a class="dropdown-item" href="{{ route('dashboard') }}">
+                                    <i class="fas fa-tachometer-alt me-2"></i> User Dashboard
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ route('admin.settings') }}">
+                                    <i class="fas fa-cog me-2"></i> Settings
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
