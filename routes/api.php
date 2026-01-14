@@ -1,11 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\AIController;
-use App\Http\Controllers\Api\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Api\Admin\PlanController as AdminPlanController;
-use App\Http\Controllers\Api\Admin\SettingController as AdminSettingController;
-use App\Http\Controllers\Api\Admin\TemplateController as AdminTemplateController;
-use App\Http\Controllers\Api\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PortfolioController;
@@ -52,14 +47,5 @@ Route::prefix('v1')->group(function (): void {
         Route::post('payments/checkout', [PaymentController::class, 'checkout']);
         Route::get('payments/history', [PaymentController::class, 'history']);
         Route::get('subscriptions/current', [PaymentController::class, 'currentSubscription']);
-
-        Route::middleware('admin')->prefix('admin')->group(function (): void {
-            Route::get('dashboard', [AdminDashboardController::class, 'stats']);
-            Route::apiResource('templates', AdminTemplateController::class);
-            Route::apiResource('plans', AdminPlanController::class);
-            Route::apiResource('users', AdminUserController::class)->only(['index', 'show', 'update']);
-            Route::get('settings', [AdminSettingController::class, 'index']);
-            Route::put('settings', [AdminSettingController::class, 'update']);
-        });
     });
 });

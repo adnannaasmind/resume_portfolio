@@ -6,16 +6,16 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureAdmin
+class EnsureSuperAdmin
 {
     /**
      * Handle an incoming request.
-     * Allows both 'admin' and 'superadmin' roles.
+     * Only allows 'superadmin' role.
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->user() || !$request->user()->isAdmin()) {
-            abort(Response::HTTP_FORBIDDEN, 'Admin access required.');
+        if (!$request->user() || !$request->user()->isSuperAdmin()) {
+            abort(Response::HTTP_FORBIDDEN, 'Superadmin access required.');
         }
 
         return $next($request);

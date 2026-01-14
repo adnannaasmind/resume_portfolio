@@ -1,21 +1,18 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\PricingController;
 use App\Http\Controllers\Web\PortfolioController as WebPortfolioController;
 use App\Http\Controllers\Web\ResumeController as WebResumeController;
 use App\Http\Controllers\Web\ShareController;
 use App\Http\Controllers\Web\TemplateController as WebTemplateController;
+use App\Http\Controllers\Web\UserDashboardController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [UserDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 // Public pages
 Route::get('/pricing', [PricingController::class, 'index'])->name('pricing');
@@ -42,15 +39,6 @@ Route::middleware('auth')->group(function () {
 
     // Pricing checkout (web -> uses API/payment service)
     Route::post('/pricing/checkout', [PricingController::class, 'checkout'])->name('pricing.checkout');
-});
-
-// Admin routes
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-    Route::get('/users', [AdminController::class, 'users'])->name('users');
-    Route::get('/templates', [AdminController::class, 'templates'])->name('templates');
-    Route::get('/plans', [AdminController::class, 'plans'])->name('plans');
-    Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
 });
 
 require __DIR__ . '/auth.php';

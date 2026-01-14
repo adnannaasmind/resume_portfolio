@@ -1,0 +1,25 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.portfolio-card {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.portfolio-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 40px rgba(0,0,0,.1);
+}
+
+.portfolio-card img {
+    height: 220px;
+    object-fit: cover;
+}
+
+.badge {
+    margin-right: 4px;
+    margin-top: 5px;
+}

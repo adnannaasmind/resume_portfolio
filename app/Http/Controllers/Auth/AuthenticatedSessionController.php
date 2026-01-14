@@ -28,6 +28,19 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Check if the authenticated user is an admin or superadmin
+        $user = Auth::user();
+        if ($user && $user->isAdmin()) {
+            // Logout admin/superadmin users from regular login
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('admin.login')
+                ->withErrors(['email' => 'Please use the admin login page.'])
+                ->withInput($request->only('email'));
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
