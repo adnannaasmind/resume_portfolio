@@ -85,7 +85,7 @@
                                     <i class="fas fa-tachometer-alt me-2"></i> User Dashboard
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ route('admin.settings') }}">
+                                <a class="dropdown-item" href="{{ route('admin.settings.system') }}">
                                     <i class="fas fa-cog me-2"></i> Settings
                                 </a>
                                 <div class="dropdown-divider"></div>

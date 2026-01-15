@@ -6,6 +6,50 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property int|null $resume_template_id
+ * @property string $title
+ * @property string $slug
+ * @property array<array-key, mixed>|null $data
+ * @property int $completeness_score
+ * @property bool $is_public
+ * @property string $share_token
+ * @property \Illuminate\Support\Carbon|null $share_expires_at
+ * @property \Illuminate\Support\Carbon|null $last_exported_at
+ * @property string|null $pdf_path
+ * @property bool $watermark_enabled
+ * @property string $status
+ * @property string $language
+ * @property int|null $duplicated_from_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\ResumeTemplate|null $template
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereCompletenessScore($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereDuplicatedFromId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereIsPublic($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereLanguage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereLastExportedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume wherePdfPath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereResumeTemplateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereShareExpiresAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereShareToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereWatermarkEnabled($value)
+ * @mixin \Eloquent
+ */
 class Resume extends Model
 {
     use HasFactory;

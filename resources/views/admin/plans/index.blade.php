@@ -4,7 +4,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Pricing Plans</h3>
+                <h3 class="fw-bold mb-3">{{ __('Pricing Plans') }}</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ route('admin.dashboard') }}">
@@ -15,7 +15,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Plans</a>
+                        <a href="#">{{ __('Plans') }}</a>
                     </li>
                 </ul>
             </div>
@@ -34,45 +34,46 @@
                                 <ul class="specification-list">
                                     <li>
                                         <span
-                                            class="name-specification">{{ $plan->features['resume_limit'] ?? 'Unlimited' }}</span>
-                                        <span class="status-specification">Resumes</span>
+                                            class="name-specification">{{ $plan->features['resume_limit'] ?? __('Unlimited') }}</span>
+                                        <span class="status-specification">{{ __('Resumes') }}</span>
                                     </li>
                                     <li>
                                         <span
-                                            class="name-specification">{{ $plan->features['portfolio_limit'] ?? 'Unlimited' }}</span>
-                                        <span class="status-specification">Portfolios</span>
+                                            class="name-specification">{{ $plan->features['portfolio_limit'] ?? __('Unlimited') }}</span>
+                                        <span class="status-specification">{{ __('Portfolios') }}</span>
                                     </li>
                                     <li>
                                         <span
-                                            class="name-specification">{{ $plan->features['ai_requests'] ?? 'Unlimited' }}</span>
-                                        <span class="status-specification">AI Requests</span>
+                                            class="name-specification">{{ $plan->features['ai_requests'] ?? __('Unlimited') }}</span>
+                                        <span class="status-specification">{{ __('AI Requests') }}</span>
                                     </li>
                                     @if (isset($plan->features['premium_templates']) && $plan->features['premium_templates'])
                                         <li>
                                             <span class="name-specification">✓</span>
-                                            <span class="status-specification">Premium Templates</span>
+                                            <span class="status-specification">{{ __('Premium Templates') }}</span>
                                         </li>
                                     @endif
                                     @if (isset($plan->features['no_watermark']) && $plan->features['no_watermark'])
                                         <li>
                                             <span class="name-specification">✓</span>
-                                            <span class="status-specification">No Watermark</span>
+                                            <span class="status-specification">{{ __('No Watermark') }}</span>
                                         </li>
                                     @endif
                                     @if (isset($plan->features['priority_support']) && $plan->features['priority_support'])
                                         <li>
                                             <span class="name-specification">✓</span>
-                                            <span class="status-specification">Priority Support</span>
+                                            <span class="status-specification">{{ __('Priority Support') }}</span>
                                         </li>
                                     @endif
                                 </ul>
                             </div>
                             <div class="card-footer">
                                 <div class="d-grid gap-2">
-                                    <button class="btn btn-primary btn-border">Edit Plan</button>
+                                    <button class="btn btn-primary btn-border">{{ __('Edit Plan') }}</button>
                                 </div>
                                 <div class="mt-2 text-center">
-                                    <small class="text-muted">{{ $plan->subscriptions_count }} active subscriptions</small>
+                                    <small class="text-muted">{{ $plan->subscriptions_count }}
+                                        {{ __('active subscriptions') }}</small>
                                 </div>
                             </div>
                         </div>
@@ -84,19 +85,19 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">All Plans</h4>
+                            <h4 class="card-title">{{ __('All Plans') }}</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Plan Name</th>
-                                            <th>Price</th>
-                                            <th>Billing</th>
-                                            <th>Subscriptions</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
+                                            <th>{{ __('Plan Name') }}</th>
+                                            <th>{{ __('Price') }}</th>
+                                            <th>{{ __('Billing') }}</th>
+                                            <th>{{ __('Subscriptions') }}</th>
+                                            <th>{{ __('Status') }}</th>
+                                            <th>{{ __('Actions') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -108,13 +109,13 @@
                                                 <td>{{ $plan->subscriptions_count }}</td>
                                                 <td>
                                                     @if ($plan->is_active)
-                                                        <span class="badge badge-success">Active</span>
+                                                        <span class="badge badge-success">{{ __('Active') }}</span>
                                                     @else
-                                                        <span class="badge badge-secondary">Inactive</span>
+                                                        <span class="badge badge-secondary">{{ __('Inactive') }}</span>
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-sm btn-primary">Edit</button>
+                                                    <button class="btn btn-sm btn-primary">{{ __('Edit') }}</button>
                                                 </td>
                                             </tr>
                                         @endforeach

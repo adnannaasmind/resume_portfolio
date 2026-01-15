@@ -9,6 +9,11 @@ use App\Http\Controllers\Api\ResumeController;
 use App\Http\Controllers\Api\ResumeShareController;
 use App\Http\Controllers\Api\ResumeTemplateController;
 use App\Http\Controllers\Api\WebhookController;
+use App\Http\Controllers\Api\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Api\Admin\PlanController as AdminPlanController;
+use App\Http\Controllers\Api\Admin\SettingController as AdminSettingController;
+use App\Http\Controllers\Api\Admin\TemplateController as AdminTemplateController;
+use App\Http\Controllers\Api\Admin\UserController as AdminUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -47,5 +52,24 @@ Route::prefix('v1')->group(function (): void {
         Route::post('payments/checkout', [PaymentController::class, 'checkout']);
         Route::get('payments/history', [PaymentController::class, 'history']);
         Route::get('subscriptions/current', [PaymentController::class, 'currentSubscription']);
+    });
+
+    // API-based Admin Routes (for backend operations)
+    Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->name('api.admin.')->group(function () {
+        // Dashboard Statistics & Analytics
+        Route::get('dashboard', [AdminDashboardController::class, 'stats'])->name('dashboard.stats');
+
+        // Template Management API
+        Route::apiResource('templates', AdminTemplateController::class);
+
+        // Pricing Plans Management API
+        Route::apiResource('plans', AdminPlanController::class);
+
+        // User Management API (limited to index, show, update)
+        Route::apiResource('users', AdminUserController::class)->only(['index', 'show', 'update']);
+
+        // System Settings API
+        Route::get('settings', [AdminSettingController::class, 'index'])->name('settings.index');
+        Route::put('settings', [AdminSettingController::class, 'update'])->name('settings.update');
     });
 });

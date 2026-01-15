@@ -10,21 +10,9 @@ class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create Superadmin
-        User::updateOrCreate(
-            ['email' => 'superadmin@example.com'],
-            [
-                'name' => 'Super Admin',
-                'password' => Hash::make('password'),
-                'role' => 'superadmin',
-                'preferred_locale' => 'en',
-                'email_verified_at' => now(),
-            ]
-        );
-
         // Create Admin
         User::updateOrCreate(
-            ['email' => 'admin@example.com'],
+            ['email' => 'admin@gmail.com'],
             [
                 'name' => 'Platform Admin',
                 'password' => Hash::make('password'),
@@ -36,7 +24,7 @@ class AdminUserSeeder extends Seeder
 
         // Create Regular User (for testing)
         User::updateOrCreate(
-            ['email' => 'user@example.com'],
+            ['email' => 'user@gmail.com'],
             [
                 'name' => 'Test User',
                 'password' => Hash::make('password'),
@@ -45,9 +33,5 @@ class AdminUserSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
-
-        // $this->command->info('✓ Created Superadmin: superadmin@example.com (password: password)');
-        // $this->command->info('✓ Created Admin: admin@example.com (password: password)');
-        // $this->command->info('✓ Created User: user@example.com (password: password)');
     }
 }

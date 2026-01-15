@@ -4,7 +4,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Template Management</h3>
+                <h3 class="fw-bold mb-3">{{ __('Template Management') }}</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ route('admin.dashboard') }}">
@@ -15,7 +15,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Templates</a>
+                        <a href="#">{{ __('Templates') }}</a>
                     </li>
                 </ul>
             </div>
@@ -24,11 +24,11 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex align-items-center">
-                                <h4 class="card-title">Resume Templates</h4>
-                                <button class="btn btn-primary btn-round ms-auto">
+                                <h4 class="card-title">{{ __('Resume Templates') }}</h4>
+                                <a href="{{ route('admin.templates.create') }}" class="btn btn-primary btn-round ms-auto">
                                     <i class="fa fa-plus"></i>
-                                    Add Template
-                                </button>
+                                    {{ __('Add Template') }}
+                                </a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -36,12 +36,11 @@
                                 <table id="templates-table" class="display table table-striped table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Category</th>
-                                            <th>Premium</th>
-                                            <th>Usage Count</th>
-                                            <th>Status</th>
-                                            <th style="width: 10%">Actions</th>
+                                            <th>{{ __('Name') }}</th>
+                                            <th>{{ __('Category') }}</th>
+                                            <th>{{ __('Premium') }}</th>
+                                            <th>{{ __('Usage Count') }}</th>
+                                            <th style="width: 10%">{{ __('Actions') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -51,33 +50,34 @@
                                                 <td>{{ ucfirst($template->category) }}</td>
                                                 <td>
                                                     @if ($template->is_premium)
-                                                        <span class="badge badge-warning">Premium</span>
+                                                        <span class="badge badge-warning">{{ __('Premium') }}</span>
                                                     @else
-                                                        <span class="badge badge-success">Free</span>
+                                                        <span class="badge badge-success">{{ __('Free') }}</span>
                                                     @endif
                                                 </td>
                                                 <td>{{ $template->resumes_count }}</td>
                                                 <td>
-                                                    @if ($template->is_active)
-                                                        <span class="badge badge-success">Active</span>
-                                                    @else
-                                                        <span class="badge badge-secondary">Inactive</span>
-                                                    @endif
-                                                </td>
-                                                <td>
                                                     <div class="form-button-action">
-                                                        <button type="button" data-bs-toggle="tooltip" title="Edit"
+                                                        <a href="{{ route('admin.templates.edit', $template) }}"
+                                                            data-bs-toggle="tooltip" title="{{ __('Edit') }}"
                                                             class="btn btn-link btn-primary btn-lg">
                                                             <i class="fa fa-edit"></i>
-                                                        </button>
-                                                        <button type="button" data-bs-toggle="tooltip" title="Preview"
+                                                        </a>
+                                                        <a href="{{ route('admin.templates.show', $template) }}"
+                                                            data-bs-toggle="tooltip" title="{{ __('Preview') }}"
                                                             class="btn btn-link btn-info">
                                                             <i class="fa fa-eye"></i>
-                                                        </button>
-                                                        <button type="button" data-bs-toggle="tooltip" title="Delete"
-                                                            class="btn btn-link btn-danger">
-                                                            <i class="fa fa-times"></i>
-                                                        </button>
+                                                        </a>
+                                                        <form action="{{ route('admin.templates.destroy', $template) }}"
+                                                            method="POST" class="d-inline"
+                                                            onsubmit="return confirm('{{ __('Are you sure you want to delete this template?') }}')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" data-bs-toggle="tooltip" title="{{ __('Delete') }}"
+                                                                class="btn btn-link btn-danger">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </form>
                                                     </div>
                                                 </td>
                                             </tr>

@@ -1,13 +1,16 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\AdminAuthController;
-use App\Http\Controllers\Api\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Api\Admin\PlanController as AdminPlanController;
-use App\Http\Controllers\Api\Admin\SettingController as AdminSettingController;
-use App\Http\Controllers\Api\Admin\TemplateController as AdminTemplateController;
-use App\Http\Controllers\Api\Admin\UserController as AdminUserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\ResumeController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\TemplateController;
+use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\PortfolioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,34 +42,58 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Dashboard (Admin Web Interface)
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-    // User Management
-    Route::get('/users', [AdminController::class, 'users'])->name('users');
+    // User Management - Full CRUD
+    Route::resource('users', UserController::class);
 
-    // Template Management
-    Route::get('/templates', [AdminController::class, 'templates'])->name('templates');
+    // My Resume - Full CRUD
+    Route::resource('resumes', ResumeController::class);
 
-    // Pricing Plans Management
-    Route::get('/plans', [AdminController::class, 'plans'])->name('plans');
+    // Template Management - Full CRUD
+    Route::resource('templates', TemplateController::class);
 
-    // System Settings
-    Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
-});
+    // Pricing Plans Management - Full CRUD
+    Route::resource('plans', PlanController::class);
 
-// API-based Admin Routes (for backend operations)
-Route::middleware(['auth:sanctum', 'admin'])->prefix('api/v1/admin')->name('api.admin.')->group(function () {
-    // Dashboard Statistics & Analytics
-    Route::get('/dashboard', [AdminDashboardController::class, 'stats'])->name('dashboard.stats');
+    // Portfolio Templates - Full CRUD
+    Route::resource('portfolio-templates', PortfolioController::class)->parameters([
+        'portfolio-templates' => 'portfolio'
+    ]);
 
-    // Template Management API
-    Route::apiResource('templates', AdminTemplateController::class);
+    // Reports
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/payments', [ReportController::class, 'payments'])->name('payments');
+        Route::get('/users', [ReportController::class, 'users'])->name('users');
+    });
 
-    // Pricing Plans Management API
-    Route::apiResource('plans', AdminPlanController::class);
+    // System Settings - Update operations
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('/system', [SettingController::class, 'system'])->name('system');
+        Route::post('/system', [SettingController::class, 'systemUpdate'])->name('system.update');
 
-    // User Management API (limited to index, show, update)
-    Route::apiResource('users', AdminUserController::class)->only(['index', 'show', 'update']);
+        Route::get('/smtp', [SettingController::class, 'smtp'])->name('smtp');
+        Route::post('/smtp', [SettingController::class, 'smtpUpdate'])->name('smtp.update');
 
-    // System Settings API
-    Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
-    Route::put('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
+        Route::get('/payment', [SettingController::class, 'payment'])->name('payment');
+        Route::post('/payment', [SettingController::class, 'paymentUpdate'])->name('payment.update');
+
+        Route::get('/website', [SettingController::class, 'website'])->name('website');
+        Route::post('/website', [SettingController::class, 'websiteUpdate'])->name('website.update');
+
+        Route::get('/languages', [SettingController::class, 'languages'])->name('languages');
+        Route::post('/languages', [SettingController::class, 'languagesUpdate'])->name('languages.update');
+
+        Route::get('/seo', [SettingController::class, 'seo'])->name('seo');
+        Route::post('/seo', [SettingController::class, 'seoUpdate'])->name('seo.update');
+
+        Route::get('/about', [SettingController::class, 'about'])->name('about');
+        Route::post('/about', [SettingController::class, 'aboutUpdate'])->name('about.update');
+    });
+
+    // Manage Profile
+    Route::prefix('profile')->name('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'show']);
+        Route::put('/', [ProfileController::class, 'update'])->name('.update');
+        Route::post('/password', [ProfileController::class, 'passwordUpdate'])->name('.password.update');
+        Route::post('/avatar', [ProfileController::class, 'avatarUpdate'])->name('.avatar.update');
+    });
 });

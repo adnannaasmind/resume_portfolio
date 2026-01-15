@@ -4,7 +4,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">User Management</h3>
+                <h3 class="fw-bold mb-3">{{ __('User Management') }}</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{ route('admin.dashboard') }}">
@@ -15,7 +15,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Users</a>
+                        <a href="#">{{ __('Users') }}</a>
                     </li>
                 </ul>
             </div>
@@ -24,7 +24,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex align-items-center">
-                                <h4 class="card-title">All Users</h4>
+                                <h4 class="card-title">{{ __('All Users') }}</h4>
                             </div>
                         </div>
                         <div class="card-body">
@@ -32,13 +32,13 @@
                                 <table id="users-table" class="display table table-striped table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Role</th>
-                                            <th>Resumes</th>
-                                            <th>Portfolios</th>
-                                            <th>Joined</th>
-                                            <th style="width: 10%">Actions</th>
+                                            <th>{{ __('Name') }}</th>
+                                            <th>{{ __('Email') }}</th>
+                                            <th>{{ __('Role') }}</th>
+                                            <th>{{ __('Resumes') }}</th>
+                                            <th>{{ __('Portfolios') }}</th>
+                                            <th>{{ __('Joined') }}</th>
+                                            <th style="width: 10%">{{ __('Actions') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -58,9 +58,9 @@
                                                 <td>{{ $user->email }}</td>
                                                 <td>
                                                     @if ($user->role === 'admin')
-                                                        <span class="badge badge-danger">Admin</span>
+                                                        <span class="badge badge-danger">{{ __('Admin') }}</span>
                                                     @else
-                                                        <span class="badge badge-info">User</span>
+                                                        <span class="badge badge-info">{{ __('User') }}</span>
                                                     @endif
                                                 </td>
                                                 <td>{{ $user->resumes_count }}</td>
@@ -68,12 +68,12 @@
                                                 <td>{{ $user->created_at->format('M d, Y') }}</td>
                                                 <td>
                                                     <div class="form-button-action">
-                                                        <button type="button" data-bs-toggle="tooltip" title="View User"
+                                                        <button type="button" data-bs-toggle="tooltip" title="{{ __('View User') }}"
                                                             class="btn btn-link btn-primary btn-lg">
                                                             <i class="fa fa-eye"></i>
                                                         </button>
                                                         @if ($user->role !== 'admin')
-                                                            <button type="button" data-bs-toggle="tooltip" title="Delete"
+                                                            <button type="button" data-bs-toggle="tooltip" title="{{ __('Delete') }}"
                                                                 class="btn btn-link btn-danger">
                                                                 <i class="fa fa-times"></i>
                                                             </button>

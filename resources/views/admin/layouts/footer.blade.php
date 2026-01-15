@@ -8,7 +8,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.settings') }}">
+                    <a class="nav-link" href="{{ route('admin.settings.system') }}">
                         Settings
                     </a>
                 </li>

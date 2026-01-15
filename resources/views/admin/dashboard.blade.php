@@ -5,32 +5,32 @@
         <div class="page-inner">
             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
                 <div>
-                    <h3 class="fw-bold mb-3">Admin Dashboard</h3>
-                    <h6 class="op-7 mb-2">ResumePro Admin Panel</h6>
+                    <h3 class="fw-bold mb-3">{{ __('Admin Dashboard') }}</h3>
+                    <h6 class="op-7 mb-2">{{ __('ResumePro Admin Panel') }}</h6>
                 </div>
                 <div class="ms-md-auto py-2 py-md-0">
-                    <a href="{{ route('admin.settings') }}" class="btn btn-label-info btn-round me-2">Settings</a>
-                    <a href="{{ route('dashboard') }}" class="btn btn-primary btn-round">User Dashboard</a>
+                    <a href="{{ route('admin.settings.system') }}" class="btn btn-label-info btn-round me-2">{{ __('Settings') }}</a>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary btn-round">{{ __('User Dashboard') }}</a>
                 </div>
             </div>
 
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Success!</strong> {{ session('success') }}
+                    <strong>{{ __('Success!') }}</strong> {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
 
             @if(session('error'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Error!</strong> {{ session('error') }}
+                    <strong>{{ __('Error!') }}</strong> {{ session('error') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
 
             @if($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Please fix the following errors:</strong>
+                    <strong>{{ __('Please fix the following errors:') }}</strong>
                     <ul class="mb-0 mt-2">
                         @foreach($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -53,7 +53,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">Total Users</p>
+                                        <p class="card-category">{{ __('Total Users') }}</p>
                                         <h4 class="card-title">{{ number_format($stats['total_users'] ?? 0) }}</h4>
                                     </div>
                                 </div>
@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">Total Resumes</p>
+                                        <p class="card-category">{{ __('Total Resumes') }}</p>
                                         <h4 class="card-title">{{ number_format($stats['total_resumes'] ?? 0) }}</h4>
                                     </div>
                                 </div>
@@ -91,7 +91,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">Total Portfolios</p>
+                                        <p class="card-category">{{ __('Total Portfolios') }}</p>
                                         <h4 class="card-title">{{ number_format($stats['total_portfolios'] ?? 0) }}</h4>
                                     </div>
                                 </div>
@@ -110,7 +110,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">Total Revenue</p>
+                                        <p class="card-category">{{ __('Total Revenue') }}</p>
                                         <h4 class="card-title">${{ number_format($stats['total_revenue'] ?? 0, 2) }}</h4>
                                     </div>
                                 </div>
@@ -133,7 +133,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">Active Subscriptions</p>
+                                        <p class="card-category">{{ __('Active Subscriptions') }}</p>
                                         <h4 class="card-title">{{ number_format($stats['active_subscriptions'] ?? 0) }}</h4>
                                     </div>
                                 </div>
@@ -152,7 +152,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">AI Requests</p>
+                                        <p class="card-category">{{ __('AI Requests') }}</p>
                                         <h4 class="card-title">{{ number_format($stats['ai_requests'] ?? 0) }}</h4>
                                     </div>
                                 </div>
@@ -171,7 +171,7 @@
                                 </div>
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">Monthly Revenue</p>
+                                        <p class="card-category">{{ __('Monthly Revenue') }}</p>
                                         <h4 class="card-title">${{ number_format($stats['monthly_revenue'] ?? 0, 2) }}</h4>
                                     </div>
                                 </div>
@@ -187,7 +187,7 @@
                     <div class="card card-round">
                         <div class="card-header">
                             <div class="card-head-row">
-                                <div class="card-title">Revenue Statistics (Last 7 Months)</div>
+                                <div class="card-title">{{ __('Revenue Statistics (Last 7 Months)') }}</div>
                             </div>
                         </div>
                         <div class="card-body">
@@ -199,7 +199,7 @@
                                 <div class="d-flex align-items-center justify-content-center" style="min-height: 375px">
                                     <div class="text-center">
                                         <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
-                                        <p class="text-muted">No revenue data available</p>
+                                        <p class="text-muted">{{ __('No revenue data available') }}</p>
                                     </div>
                                 </div>
                             @endif
@@ -219,7 +219,7 @@
                                     </span>
                                 </div>
                                 <div class="ms-3 info-text">
-                                    <h5 class="text-muted mb-0">This Month Revenue</h5>
+                                    <h5 class="text-muted mb-0">{{ __('This Month Revenue') }}</h5>
                                 </div>
                             </div>
                         </div>
@@ -228,7 +228,7 @@
                         <div class="card-body pb-0">
                             <div class="h1 fw-bold float-end text-primary">{{ $stats['templates'] ?? 0 }}</div>
                             <h2 class="mb-2">{{ $stats['templates'] ?? 0 }}</h2>
-                            <p class="text-muted">Resume Templates</p>
+                            <p class="text-muted">{{ __('Resume Templates') }}</p>
                             <div class="progress progress-sm">
                                 <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="75"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
@@ -244,13 +244,13 @@
                     <div class="card card-round">
                         <div class="card-header">
                             <div class="card-head-row card-tools-still-right">
-                                <h4 class="card-title">Recent Users</h4>
+                                <h4 class="card-title">{{ __('Recent Users') }}</h4>
                                 <div class="card-tools">
-                                    <a href="{{ route('admin.users') }}" class="btn btn-label-info btn-round btn-sm me-2">
+                                    <a href="{{ route('admin.users.index') }}" class="btn btn-label-info btn-round btn-sm me-2">
                                         <span class="btn-label">
                                             <i class="fa fa-pencil"></i>
                                         </span>
-                                        View All
+                                        {{ __('View All') }}
                                     </a>
                                 </div>
                             </div>
@@ -260,9 +260,9 @@
                                 <table class="table align-items-center mb-0">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th scope="col">Name</th>
-                                            <th scope="col" class="text-end">Email</th>
-                                            <th scope="col" class="text-end">Joined</th>
+                                            <th scope="col">{{ __('Name') }}</th>
+                                            <th scope="col" class="text-end">{{ __('Email') }}</th>
+                                            <th scope="col" class="text-end">{{ __('Joined') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -291,7 +291,7 @@
                                             <tr>
                                                 <td colspan="3" class="text-center py-4">
                                                     <i class="fas fa-users fa-2x text-muted mb-2"></i>
-                                                    <p class="text-muted mb-0">No users yet</p>
+                                                    <p class="text-muted mb-0">{{ __('No users yet') }}</p>
                                                 </td>
                                             </tr>
                                         @endforelse
@@ -305,13 +305,13 @@
                     <div class="card card-round">
                         <div class="card-header">
                             <div class="card-head-row card-tools-still-right">
-                                <h4 class="card-title">Recent Payments</h4>
+                                <h4 class="card-title">{{ __('Recent Payments') }}</h4>
                                 <div class="card-tools">
                                     <button class="btn btn-label-success btn-round btn-sm me-2">
                                         <span class="btn-label">
                                             <i class="fa fa-dollar-sign"></i>
                                         </span>
-                                        Export
+                                        {{ __('Export') }}
                                     </button>
                                 </div>
                             </div>
@@ -321,9 +321,9 @@
                                 <table class="table align-items-center mb-0">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th scope="col">User</th>
-                                            <th scope="col" class="text-end">Amount</th>
-                                            <th scope="col" class="text-end">Status</th>
+                                            <th scope="col">{{ __('User') }}</th>
+                                            <th scope="col" class="text-end">{{ __('Amount') }}</th>
+                                            <th scope="col" class="text-end">{{ __('Status') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -343,7 +343,7 @@
                                             <tr>
                                                 <td colspan="3" class="text-center py-4">
                                                     <i class="fas fa-dollar-sign fa-2x text-muted mb-2"></i>
-                                                    <p class="text-muted mb-0">No payments yet</p>
+                                                    <p class="text-muted mb-0">{{ __('No payments yet') }}</p>
                                                 </td>
                                             </tr>
                                         @endforelse

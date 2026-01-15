@@ -6,15 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Models\AIRequest;
 use App\Models\Payment;
 use App\Models\Portfolio;
-use App\Models\PricingPlan;
 use App\Models\Resume;
 use App\Models\ResumeTemplate;
 use App\Models\Subscription;
 use App\Models\User;
-use Illuminate\Http\Request;
 
+/**
+ * Admin Controller
+ *
+ * Main dashboard controller for admin panel
+ */
 class AdminController extends Controller
 {
+    /**
+     * Display admin dashboard with statistics
+     */
     public function dashboard()
     {
         try {
@@ -41,29 +47,9 @@ class AdminController extends Controller
         }
     }
 
-    public function users()
-    {
-        $users = User::withCount(['resumes', 'portfolios'])->latest()->paginate(20);
-        return view('admin.users.index', compact('users'));
-    }
-
-    public function templates()
-    {
-        $templates = ResumeTemplate::withCount('resumes')->latest()->paginate(20);
-        return view('admin.templates.index', compact('templates'));
-    }
-
-    public function plans()
-    {
-        $plans = PricingPlan::withCount('subscriptions')->orderBy('price')->get();
-        return view('admin.plans.index', compact('plans'));
-    }
-
-    public function settings()
-    {
-        return view('admin.settings.index');
-    }
-
+    /**
+     * Get revenue chart data for last 7 months
+     */
     private function getRevenueChartData()
     {
         $months = [];
