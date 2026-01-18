@@ -60,13 +60,13 @@
                                                     <div class="form-button-action">
                                                         <a href="{{ route('admin.templates.edit', $template) }}"
                                                             data-bs-toggle="tooltip" title="{{ __('Edit') }}"
-                                                            class="btn btn-link btn-primary btn-lg">
-                                                            <i class="fa fa-edit"></i>
+                                                            class="btn btn-primary btn-lg">
+                                                            <i class="fa fa-edit fa-xs"></i>
                                                         </a>
                                                         <a href="{{ route('admin.templates.show', $template) }}"
                                                             data-bs-toggle="tooltip" title="{{ __('Preview') }}"
-                                                            class="btn btn-link btn-info">
-                                                            <i class="fa fa-eye"></i>
+                                                            class="btn btn-info">
+                                                            <i class="fa fa-eye fa-xs"></i>
                                                         </a>
                                                         <form action="{{ route('admin.templates.destroy', $template) }}"
                                                             method="POST" class="d-inline"
@@ -74,8 +74,8 @@
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" data-bs-toggle="tooltip" title="{{ __('Delete') }}"
-                                                                class="btn btn-link btn-danger">
-                                                                <i class="fa fa-times"></i>
+                                                                class="btn btn-danger">
+                                                                <i class="fa fa-times fa-xs"></i>
                                                             </button>
                                                         </form>
                                                     </div>

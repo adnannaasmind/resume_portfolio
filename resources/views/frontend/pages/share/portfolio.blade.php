@@ -1,4 +1,4 @@
-@extends('layouts.app-lite')
+@extends('frontend.layouts.master')
 @section('content')
 <div class="max-w-4xl mx-auto bg-white shadow rounded p-6">
     <div class="flex justify-between items-start">

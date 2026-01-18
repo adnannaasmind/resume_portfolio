@@ -1,16 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\PlanController;
-use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\PortfolioController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ResumeController;
-use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TemplateController;
-use App\Http\Controllers\Admin\AdminAuthController;
-use App\Http\Controllers\Admin\PortfolioController;
+use App\Http\Controllers\Admin\UserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,7 +56,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Portfolio Templates - Full CRUD
     Route::resource('portfolio-templates', PortfolioController::class)->parameters([
-        'portfolio-templates' => 'portfolio'
+        'portfolio-templates' => 'portfolio',
     ]);
 
     // Reports

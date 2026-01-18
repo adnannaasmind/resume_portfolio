@@ -15,7 +15,7 @@ class ShareController extends Controller
             ->with(['template', 'user:id,name'])
             ->firstOrFail();
 
-        return view('share.resume', compact('resume'));
+        return view('frontend.pages.share.resume', compact('resume'));
     }
 
     public function portfolio(string $slug)
@@ -25,6 +25,6 @@ class ShareController extends Controller
             ->with('user:id,name')
             ->firstOrFail();
 
-        return view('share.portfolio', compact('portfolio'));
+        return view('frontend.pages.share.portfolio', compact('portfolio'));
     }
 }

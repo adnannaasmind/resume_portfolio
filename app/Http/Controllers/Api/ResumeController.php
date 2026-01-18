@@ -15,8 +15,7 @@ class ResumeController extends Controller
     public function __construct(
         protected ResumeCompletenessService $completenessService,
         protected PdfExportService $pdfExportService
-    ) {
-    }
+    ) {}
 
     public function index(Request $request)
     {
@@ -157,7 +156,7 @@ class ResumeController extends Controller
     {
         $subscription = $user->activeSubscription();
 
-        if (!$subscription || $subscription->status !== 'active') {
+        if (! $subscription || $subscription->status !== 'active') {
             return true;
         }
 

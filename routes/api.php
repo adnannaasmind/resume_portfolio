@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Api\Admin\PlanController as AdminPlanController;
+use App\Http\Controllers\Api\Admin\SettingController as AdminSettingController;
+use App\Http\Controllers\Api\Admin\TemplateController as AdminTemplateController;
+use App\Http\Controllers\Api\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Api\AIController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PaymentController;
@@ -9,11 +14,6 @@ use App\Http\Controllers\Api\ResumeController;
 use App\Http\Controllers\Api\ResumeShareController;
 use App\Http\Controllers\Api\ResumeTemplateController;
 use App\Http\Controllers\Api\WebhookController;
-use App\Http\Controllers\Api\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Api\Admin\PlanController as AdminPlanController;
-use App\Http\Controllers\Api\Admin\SettingController as AdminSettingController;
-use App\Http\Controllers\Api\Admin\TemplateController as AdminTemplateController;
-use App\Http\Controllers\Api\Admin\UserController as AdminUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {

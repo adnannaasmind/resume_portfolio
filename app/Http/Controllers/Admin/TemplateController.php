@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ResumeTemplate;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 
 class TemplateController extends Controller
 {
     public function index(): View
     {
         $templates = ResumeTemplate::withCount('resumes')->latest()->paginate(20);
+
         return view('admin.templates.index', compact('templates'));
     }
 
@@ -47,6 +48,7 @@ class TemplateController extends Controller
     public function show(ResumeTemplate $template): View
     {
         $template->loadCount('resumes');
+
         return view('admin.templates.show', compact('template'));
     }
 
@@ -79,6 +81,7 @@ class TemplateController extends Controller
     public function destroy(ResumeTemplate $template): RedirectResponse
     {
         $template->delete();
+
         return redirect()->route('admin.templates.index')
             ->with('success', 'Template deleted successfully');
     }

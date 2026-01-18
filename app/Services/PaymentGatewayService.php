@@ -22,7 +22,7 @@ class PaymentGatewayService
     {
         $secret = config('services.stripe.secret_key');
 
-        if (!$secret || !$plan->stripe_price_id) {
+        if (! $secret || ! $plan->stripe_price_id) {
             return $this->placeholderCheckout('stripe', $plan);
         }
 
@@ -57,7 +57,7 @@ class PaymentGatewayService
         $clientId = config('services.paypal.client_id');
         $planId = $plan->paypal_plan_id;
 
-        if (!$clientId || !$planId) {
+        if (! $clientId || ! $planId) {
             return $this->placeholderCheckout('paypal', $plan);
         }
 
@@ -65,7 +65,7 @@ class PaymentGatewayService
         return $this->placeholderCheckout('paypal', $plan);
     }
 
-    protected function placeholderCheckout(string $provider, PricingPlan $plan, string $note = null): array
+    protected function placeholderCheckout(string $provider, PricingPlan $plan, ?string $note = null): array
     {
         return [
             'provider' => $provider,

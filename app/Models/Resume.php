@@ -27,6 +27,7 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\ResumeTemplate|null $template
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume query()
@@ -48,6 +49,7 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Resume whereWatermarkEnabled($value)
+ *
  * @mixin \Eloquent
  */
 class Resume extends Model
@@ -83,11 +85,11 @@ class Resume extends Model
     protected static function booted(): void
     {
         static::creating(function (self $resume) {
-            if (!$resume->slug) {
+            if (! $resume->slug) {
                 $resume->slug = Str::slug($resume->title.'-'.Str::random(6));
             }
 
-            if (!$resume->share_token) {
+            if (! $resume->share_token) {
                 $resume->share_token = Str::uuid()->toString();
             }
         });
@@ -119,6 +121,58 @@ class Resume extends Model
         $copy->duplicated_from_id = $this->id;
         $copy->save();
 
+        $this->experiences->each(function (ResumeExperience $experience) use ($copy) {
+            $copy->experiences()->create(
+                collect($experience->toArray())
+                    ->except(['id', 'resume_id', 'created_at', 'updated_at'])
+                    ->all()
+            );
+        });
+
+        $this->educations->each(function (ResumeEducation $education) use ($copy) {
+            $copy->educations()->create(
+                collect($education->toArray())
+                    ->except(['id', 'resume_id', 'created_at', 'updated_at'])
+                    ->all()
+            );
+        });
+
+        $this->skills->each(function (ResumeSkill $skill) use ($copy) {
+            $copy->skills()->create(
+                collect($skill->toArray())
+                    ->except(['id', 'resume_id', 'created_at', 'updated_at'])
+                    ->all()
+            );
+        });
+
+        $this->projects->each(function (ResumeProject $project) use ($copy) {
+            $copy->projects()->create(
+                collect($project->toArray())
+                    ->except(['id', 'resume_id', 'created_at', 'updated_at'])
+                    ->all()
+            );
+        });
+
         return $copy;
+    }
+
+    public function experiences()
+    {
+        return $this->hasMany(ResumeExperience::class);
+    }
+
+    public function educations()
+    {
+        return $this->hasMany(ResumeEducation::class);
+    }
+
+    public function skills()
+    {
+        return $this->hasMany(ResumeSkill::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(ResumeProject::class);
     }
 }

@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends BaseApiController
 {
@@ -36,7 +36,7 @@ class AuthController extends BaseApiController
 
         $deviceName = $request->header('X-Device-Name', 'Unknown Device');
         $deviceId = $request->header('X-Device-ID');
-        
+
         $token = $user->createToken($deviceName, ['*'], $deviceId ? ['device_id' => $deviceId] : [])->plainTextToken;
 
         return $this->created([
@@ -52,7 +52,7 @@ class AuthController extends BaseApiController
             'password' => ['required', 'string'],
         ]);
 
-        if (!Auth::attempt($credentials)) {
+        if (! Auth::attempt($credentials)) {
             throw ValidationException::withMessages([
                 'email' => ['Invalid credentials.'],
             ]);
@@ -64,7 +64,7 @@ class AuthController extends BaseApiController
 
         $deviceName = $request->header('X-Device-Name', 'Unknown Device');
         $deviceId = $request->header('X-Device-ID');
-        
+
         $token = $user->createToken($deviceName, ['*'], $deviceId ? ['device_id' => $deviceId] : [])->plainTextToken;
 
         return $this->success([
@@ -126,13 +126,13 @@ class AuthController extends BaseApiController
         /** @var User $user */
         $user = $request->user();
 
-        $update = collect($data)->except('password')->filter(fn ($value) => !is_null($value))->toArray();
+        $update = collect($data)->except('password')->filter(fn ($value) => ! is_null($value))->toArray();
 
         if ($update) {
             $user->update($update);
         }
 
-        if (!empty($data['password'])) {
+        if (! empty($data['password'])) {
             $user->update(['password' => Hash::make($data['password'])]);
         }
 

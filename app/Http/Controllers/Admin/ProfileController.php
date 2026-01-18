@@ -14,6 +14,7 @@ class ProfileController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user(); // @phpstan-ignore-line
+
         return view('admin.profile', compact('user'));
     }
 
@@ -24,7 +25,7 @@ class ProfileController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'preferred_locale' => 'nullable|string',
             'timezone' => 'nullable|string',
         ]);
@@ -45,13 +46,13 @@ class ProfileController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        if (!Hash::check($validated['current_password'], $user->password)) {
+        if (! Hash::check($validated['current_password'], $user->password)) {
             return redirect()->route('admin.profile')
                 ->with('error', 'Current password is incorrect');
         }
 
         $user->update([
-            'password' => Hash::make($validated['password'])
+            'password' => Hash::make($validated['password']),
         ]);
 
         return redirect()->route('admin.profile')

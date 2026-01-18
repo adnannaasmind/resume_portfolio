@@ -9,7 +9,7 @@ class ResumeCompletenessService
      */
     public function calculate(?array $data): int
     {
-        if (!$data) {
+        if (! $data) {
             return 0;
         }
 
@@ -27,7 +27,7 @@ class ResumeCompletenessService
         $score = 0;
 
         foreach ($sections as $section => $weight) {
-            if (!array_key_exists($section, $data)) {
+            if (! array_key_exists($section, $data)) {
                 continue;
             }
 

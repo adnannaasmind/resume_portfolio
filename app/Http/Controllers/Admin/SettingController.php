@@ -115,6 +115,7 @@ class SettingController extends Controller
     public function languages()
     {
         $languages = ['en' => 'English', 'es' => 'Spanish'];
+
         return view('admin.settings.languages', compact('languages'));
     }
 

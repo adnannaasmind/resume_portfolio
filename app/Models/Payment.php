@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \App\Models\PricingPlan|null $plan
  * @property-read \App\Models\Subscription|null $subscription
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment query()
@@ -42,6 +43,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereSubscriptionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Payment whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Payment extends Model

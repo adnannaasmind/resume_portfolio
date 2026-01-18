@@ -1,4 +1,4 @@
-@extends('layouts.app-lite')
+@extends('frontend.layouts.master')
 @section('content')
 <h1 class="text-2xl font-semibold mb-4">Create Portfolio</h1>
 <form method="POST" action="{{ route('portfolios.store') }}" class="space-y-4">

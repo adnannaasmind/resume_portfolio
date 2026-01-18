@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Resume> $resumes
  * @property-read int|null $resumes_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ResumeTemplate newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ResumeTemplate newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ResumeTemplate query()
@@ -37,6 +38,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ResumeTemplate wherePreviewUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ResumeTemplate whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ResumeTemplate whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class ResumeTemplate extends Model

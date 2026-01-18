@@ -12,12 +12,13 @@ class PortfolioController extends Controller
     public function index(Request $request)
     {
         $portfolios = $request->user()->portfolios()->latest()->paginate(10);
-        return view('portfolios.index', compact('portfolios'));
+
+        return view('frontend.pages.portfolios.index', compact('portfolios'));
     }
 
     public function create()
     {
-        return view('portfolios.create');
+        return view('frontend.pages.portfolios.create');
     }
 
     public function store(Request $request)
@@ -34,7 +35,8 @@ class PortfolioController extends Controller
     public function edit(Portfolio $portfolio)
     {
         $this->authorizeUser($portfolio);
-        return view('portfolios.edit', compact('portfolio'));
+
+        return view('frontend.pages.portfolios.edit', compact('portfolio'));
     }
 
     public function update(Request $request, Portfolio $portfolio)
@@ -50,6 +52,7 @@ class PortfolioController extends Controller
     {
         $this->authorizeUser($portfolio);
         $portfolio->delete();
+
         return redirect()->route('portfolios.index')->with('status', 'Portfolio deleted.');
     }
 
@@ -68,6 +71,7 @@ class PortfolioController extends Controller
     {
         $this->authorizeUser($portfolio);
         $portfolio->update(['is_public' => false]);
+
         return back()->with('status', 'Portfolio unpublished.');
     }
 

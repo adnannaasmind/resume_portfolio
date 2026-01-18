@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscription> $subscriptions
  * @property-read int|null $subscriptions_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PricingPlan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PricingPlan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PricingPlan query()
@@ -47,6 +48,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PricingPlan whereStripePriceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PricingPlan whereTemplateLimit($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PricingPlan whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class PricingPlan extends Model

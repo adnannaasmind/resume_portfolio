@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\HomeController;
-use App\Http\Controllers\Web\PricingController;
 use App\Http\Controllers\Web\PortfolioController as WebPortfolioController;
+use App\Http\Controllers\Web\PricingController;
 use App\Http\Controllers\Web\ResumeController as WebResumeController;
 use App\Http\Controllers\Web\ShareController;
 use App\Http\Controllers\Web\TemplateController as WebTemplateController;
@@ -41,4 +41,4 @@ Route::middleware('auth')->group(function () {
     Route::post('/pricing/checkout', [PricingController::class, 'checkout'])->name('pricing.checkout');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

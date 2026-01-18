@@ -9,14 +9,13 @@ use Illuminate\Http\Request;
 
 class PricingController extends Controller
 {
-    public function __construct(protected PaymentGatewayService $gateway)
-    {
-    }
+    public function __construct(protected PaymentGatewayService $gateway) {}
 
     public function index()
     {
         $plans = PricingPlan::where('is_active', true)->orderByDesc('is_featured')->orderBy('price')->get();
-        return view('pricing.index', compact('plans'));
+
+        return view('frontend.pages.pricing.index', compact('plans'));
     }
 
     public function checkout(Request $request)

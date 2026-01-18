@@ -9,9 +9,7 @@ use Illuminate\Http\Request;
 
 class AIController extends Controller
 {
-    public function __construct(protected AiCoverLetterService $service)
-    {
-    }
+    public function __construct(protected AiCoverLetterService $service) {}
 
     public function generateCoverLetter(Request $request)
     {

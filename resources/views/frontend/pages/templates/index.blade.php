@@ -1,4 +1,4 @@
-@extends('layouts.app-lite')
+@extends('frontend.layouts.master')
 @section('content')
 <div class="mb-6">
     <h1 class="text-2xl font-semibold">Resume Templates</h1>

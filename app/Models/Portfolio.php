@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Portfolio newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Portfolio newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Portfolio query()
@@ -52,6 +53,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Portfolio whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Portfolio whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Portfolio whereViewsCount($value)
+ *
  * @mixin \Eloquent
  */
 class Portfolio extends Model

@@ -30,7 +30,7 @@ class UserController extends Controller
 
         $user->update(collect($data)->except('pricing_plan_id')->filter()->toArray());
 
-        if (!empty($data['pricing_plan_id'])) {
+        if (! empty($data['pricing_plan_id'])) {
             $plan = PricingPlan::find($data['pricing_plan_id']);
 
             Subscription::updateOrCreate(

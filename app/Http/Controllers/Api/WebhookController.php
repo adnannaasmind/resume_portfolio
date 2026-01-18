@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
-use App\Models\Subscription;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class WebhookController extends Controller
 {
@@ -42,7 +40,7 @@ class WebhookController extends Controller
             ->where('provider_payment_id', $reference)
             ->first();
 
-        if (!$payment) {
+        if (! $payment) {
             return;
         }
 

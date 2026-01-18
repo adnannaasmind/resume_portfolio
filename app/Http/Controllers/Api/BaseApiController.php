@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class BaseApiController extends Controller
@@ -12,7 +11,7 @@ abstract class BaseApiController extends Controller
     /**
      * Return a success JSON response.
      */
-    protected function success(mixed $data = null, string $message = null, int $statusCode = 200): JsonResponse
+    protected function success(mixed $data = null, ?string $message = null, int $statusCode = 200): JsonResponse
     {
         $response = [
             'success' => true,
@@ -36,7 +35,7 @@ abstract class BaseApiController extends Controller
             'message' => $message,
         ];
 
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             $response['errors'] = $errors;
         }
 
@@ -46,7 +45,7 @@ abstract class BaseApiController extends Controller
     /**
      * Return a paginated JSON response (mobile-friendly).
      */
-    protected function paginated(LengthAwarePaginator $paginator, string $resourceClass = null): JsonResponse
+    protected function paginated(LengthAwarePaginator $paginator, ?string $resourceClass = null): JsonResponse
     {
         $data = $paginator->items();
 

@@ -11,6 +11,7 @@ class PlanController extends Controller
     public function index()
     {
         $plans = PricingPlan::withCount('subscriptions')->latest()->paginate(20);
+
         return view('admin.plans.index', compact('plans'));
     }
 
@@ -40,6 +41,7 @@ class PlanController extends Controller
     public function show(PricingPlan $plan)
     {
         $plan->loadCount('subscriptions');
+
         return view('admin.plans.show', compact('plan'));
     }
 
@@ -69,6 +71,7 @@ class PlanController extends Controller
     public function destroy(PricingPlan $plan)
     {
         $plan->delete();
+
         return redirect()->route('admin.plans.index')
             ->with('success', 'Plan deleted successfully');
     }

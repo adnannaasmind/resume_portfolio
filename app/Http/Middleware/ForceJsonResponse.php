@@ -24,7 +24,7 @@ class ForceJsonResponse
         $response = $next($request);
 
         // Ensure JSON response for API routes
-        if ($request->is('api/*') && !$response->headers->has('Content-Type')) {
+        if ($request->is('api/*') && ! $response->headers->has('Content-Type')) {
             $response->headers->set('Content-Type', 'application/json');
         }
 

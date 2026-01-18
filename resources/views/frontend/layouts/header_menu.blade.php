@@ -10,13 +10,13 @@
         <div class="collapse navbar-collapse" id="nav">
             <ul class="navbar-nav ms-auto align-items-lg-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Home</a>
+                    <a class="nav-link" href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Templates</a>
+                    <a class="nav-link" href="{{ route('templates.index') }}">Templates</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
+                    <a class="nav-link" href="{{ route('pricing') }}">Pricing</a>
                 </li>
 
                 <!-- Login -->

@@ -1,4 +1,4 @@
-@extends('layouts.app-lite')
+@extends('frontend.layouts.master')
 @section('content')
 <div class="flex justify-between items-center mb-4">
     <div>

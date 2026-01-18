@@ -11,6 +11,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::withCount(['resumes', 'portfolios'])->latest()->paginate(20);
+
         return view('admin.users.index', compact('users'));
     }
 
@@ -42,6 +43,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         $user->load(['resumes', 'portfolios', 'subscriptions', 'payments']);
+
         return view('admin.users.show', compact('user'));
     }
 
@@ -54,7 +56,7 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'password' => 'nullable|string|min:8',
             'role' => 'required|in:user,admin',
             'preferred_locale' => 'nullable|string',
@@ -62,7 +64,7 @@ class UserController extends Controller
             'profile_completed' => 'nullable|boolean',
         ]);
 
-        if (!empty($validated['password'])) {
+        if (! empty($validated['password'])) {
             $validated['password'] = bcrypt($validated['password']);
         } else {
             unset($validated['password']);
@@ -77,6 +79,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
+
         return redirect()->route('admin.users.index')
             ->with('success', 'User deleted successfully');
     }

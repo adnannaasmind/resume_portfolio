@@ -43,7 +43,7 @@ class AdminController extends Controller
 
             return view('admin.dashboard', compact('stats', 'recent_users', 'recent_payments', 'revenue_chart'));
         } catch (\Exception $e) {
-            return back()->with('error', 'Error loading dashboard: ' . $e->getMessage());
+            return back()->with('error', 'Error loading dashboard: '.$e->getMessage());
         }
     }
 

@@ -13,6 +13,7 @@ class ResumeController extends Controller
     public function index()
     {
         $resumes = Resume::with(['user', 'template'])->latest()->paginate(20);
+
         return view('admin.resumes.index', compact('resumes'));
     }
 
@@ -20,6 +21,7 @@ class ResumeController extends Controller
     {
         $templates = ResumeTemplate::all();
         $users = User::all();
+
         return view('admin.resumes.create', compact('templates', 'users'));
     }
 
@@ -41,6 +43,7 @@ class ResumeController extends Controller
     public function show(Resume $resume)
     {
         $resume->load(['user', 'template']);
+
         return view('admin.resumes.show', compact('resume'));
     }
 
@@ -48,6 +51,7 @@ class ResumeController extends Controller
     {
         $templates = ResumeTemplate::all();
         $users = User::all();
+
         return view('admin.resumes.edit', compact('resume', 'templates', 'users'));
     }
 
@@ -69,6 +73,7 @@ class ResumeController extends Controller
     public function destroy(Resume $resume)
     {
         $resume->delete();
+
         return redirect()->route('admin.resumes.index')
             ->with('success', 'Resume deleted successfully');
     }

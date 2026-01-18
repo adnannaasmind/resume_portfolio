@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AIRequest newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AIRequest newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AIRequest query()
@@ -32,6 +33,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AIRequest whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AIRequest whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AIRequest whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class AIRequest extends Model
