@@ -9,6 +9,8 @@ class ResumeExperience extends Model
 {
     use HasFactory;
 
+    protected $table = 'resume_experiences';
+
     protected $fillable = [
         'resume_id',
         'company',

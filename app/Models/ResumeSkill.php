@@ -9,6 +9,8 @@ class ResumeSkill extends Model
 {
     use HasFactory;
 
+    protected $table = 'resume_skills';
+
     protected $fillable = [
         'resume_id',
         'name',

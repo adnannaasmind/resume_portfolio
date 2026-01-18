@@ -96,6 +96,12 @@ class User extends Authenticatable
         return $this->hasOne(UserProfile::class);
     }
 
+    // Alias for userProfile
+    public function userProfile()
+    {
+        return $this->hasOne(UserProfile::class);
+    }
+
     public function resumes()
     {
         return $this->hasMany(Resume::class);

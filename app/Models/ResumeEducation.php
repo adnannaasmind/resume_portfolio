@@ -9,6 +9,8 @@ class ResumeEducation extends Model
 {
     use HasFactory;
 
+    protected $table = 'resume_educations';
+
     protected $fillable = [
         'resume_id',
         'institution',

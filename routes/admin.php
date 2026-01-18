@@ -48,7 +48,42 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // My Resume - Full CRUD
     Route::resource('resumes', ResumeController::class);
 
+    // Resume Sections Management
+    Route::prefix('resumes/{resume}')->name('resumes.')->group(function () {
+        // Experiences
+        Route::post('experiences', [ResumeController::class, 'storeExperience'])->name('experiences.store');
+        Route::put('experiences/{experience}', [ResumeController::class, 'updateExperience'])->name('experiences.update');
+        Route::delete('experiences/{experience}', [ResumeController::class, 'deleteExperience'])->name('experiences.delete');
+
+        // Education
+        Route::post('educations', [ResumeController::class, 'storeEducation'])->name('educations.store');
+        Route::put('educations/{education}', [ResumeController::class, 'updateEducation'])->name('educations.update');
+        Route::delete('educations/{education}', [ResumeController::class, 'deleteEducation'])->name('educations.delete');
+
+        // Skills
+        Route::post('skills', [ResumeController::class, 'storeSkill'])->name('skills.store');
+        Route::put('skills/{skill}', [ResumeController::class, 'updateSkill'])->name('skills.update');
+        Route::delete('skills/{skill}', [ResumeController::class, 'deleteSkill'])->name('skills.delete');
+
+        // Projects
+        Route::post('projects', [ResumeController::class, 'storeProject'])->name('projects.store');
+        Route::put('projects/{project}', [ResumeController::class, 'updateProject'])->name('projects.update');
+        Route::delete('projects/{project}', [ResumeController::class, 'deleteProject'])->name('projects.delete');
+
+        // Contact & About
+        Route::put('contact', [ResumeController::class, 'updateContact'])->name('contact.update');
+        Route::put('about', [ResumeController::class, 'updateAbout'])->name('about.update');
+
+        // References
+        Route::post('references', [ResumeController::class, 'storeReference'])->name('references.store');
+        Route::put('references/{reference}', [ResumeController::class, 'updateReference'])->name('references.update');
+        Route::delete('references/{reference}', [ResumeController::class, 'deleteReference'])->name('references.delete');
+    });
+
+
     // Template Management - Full CRUD
+    Route::get('templates/{template}/preview', [TemplateController::class, 'preview'])->name('templates.preview');
+    Route::post('templates/{template}/use', [TemplateController::class, 'useTemplate'])->name('templates.use');
     Route::resource('templates', TemplateController::class);
 
     // Pricing Plans Management - Full CRUD

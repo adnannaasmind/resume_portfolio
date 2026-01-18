@@ -21,6 +21,10 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             <h4 class="card-title">{{ __('All Resumes') }}</h4>
+                            <a href="{{ route('admin.resumes.create') }}" class="btn btn-primary btn-round ms-auto">
+                                <i class="fas fa-plus"></i>
+                                {{ __('Add New Resume') }}
+                            </a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -47,11 +51,15 @@
                                             <td>
                                                 <div class="btn-group">
                                                     <a href="{{ route('admin.resumes.show', $resume) }}"
-                                                        class="btn btn-sm btn-info">
+                                                        class="btn btn-sm btn-info" title="{{ __('Preview') }}">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
+                                                    <a href="{{ route('admin.resumes.edit', $resume) }}"
+                                                        class="btn btn-sm btn-warning" title="{{ __('Edit') }}">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                     <button class="btn btn-sm btn-danger"
-                                                        onclick="deleteResume({{ $resume->id }})">
+                                                        onclick="deleteResume({{ $resume->id }})" title="{{ __('Delete') }}">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>

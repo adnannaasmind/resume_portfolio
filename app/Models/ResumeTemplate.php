@@ -48,7 +48,9 @@ class ResumeTemplate extends Model
     protected $fillable = [
         'name',
         'slug',
+        'blade_file',
         'preview_url',
+        'preview_image',
         'cover_image',
         'description',
         'is_premium',
