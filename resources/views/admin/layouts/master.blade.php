@@ -95,6 +95,10 @@
     <!-- Kaiadmin JS -->
     <script src="{{ asset('backend/assets/js/kaiadmin.min.js') }}"></script>
 
+    <!-- SweetAlert v1 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     <script src="{{ asset('backend/assets/js/setting-demo.js') }}"></script>
     <script src="{{ asset('backend/assets/js/demo.js') }}"></script>
@@ -126,6 +130,9 @@
             fillColor: "rgba(255, 165, 52, .14)",
         });
     </script>
+
+    @stack('scripts')
+
 </body>
 
 </html>

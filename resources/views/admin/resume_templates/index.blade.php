@@ -30,8 +30,18 @@
                         <div class="card-body">
                             <div class="row">
                                 @foreach ($templates as $template)
+                                    @php
+                                        $hasResume = in_array($template->id, $userResumeTemplateIds ?? []);
+                                    @endphp
                                     <div class="col-lg-3 col-xl-3 col-md-4 col-sm-6 mb-4">
-                                        <div class="card h-100">
+                                        <div class="card h-100 {{ $hasResume ? 'border-primary' : '' }}">
+                                            @if($hasResume)
+                                                <div class="ribbon ribbon-top-right">
+                                                    <span class="bg-primary" style="font-size: 11px; padding: 5px 15px;">
+                                                        <i class="fas fa-check"></i> In Use
+                                                    </span>
+                                                </div>
+                                            @endif
                                             <div class="pro-img-box position-relative">
                                                 <a href="{{ route('admin.templates.show', $template) }}">
                                                     @if($template->blade_file)
@@ -53,8 +63,8 @@
                                                         style="display: inline;">
                                                         @csrf
                                                         <button type="submit" class="adtocart" data-bs-toggle="tooltip"
-                                                            title="{{ __('Use This Template') }}">
-                                                            <i class="fas fa-plus"></i>
+                                                            title="{{ $hasResume ? __('Edit Your Resume') : __('Use This Template') }}">
+                                                            <i class="fas fa-{{ $hasResume ? 'edit' : 'plus' }}"></i>
                                                         </button>
                                                     </form>
                                                     <a href="{{ route('admin.templates.show', $template) }}" class="adtocart"
@@ -167,6 +177,51 @@
             background: #0d5dba;
             color: white;
             transform: scale(1.1);
+        }
+
+        /* Ribbon for templates in use */
+        .ribbon {
+            position: absolute;
+            z-index: 20;
+        }
+
+        .ribbon-top-right {
+            top: -5px;
+            right: -5px;
+        }
+
+        .ribbon-top-right span {
+            position: relative;
+            display: block;
+            text-align: center;
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transform: rotate(0deg);
+        }
+
+        .ribbon-top-right span::before,
+        .ribbon-top-right span::after {
+            position: absolute;
+            content: "";
+            display: block;
+            border: 5px solid #1572e8;
+            border-top-color: transparent;
+            border-right-color: transparent;
+            bottom: -5px;
+        }
+
+        .ribbon-top-right span::before {
+            left: 0;
+        }
+
+        .ribbon-top-right span::after {
+            right: 0;
+        }
+
+        .card.border-primary {
+            border-width: 2px !important;
+            box-shadow: 0 0 15px rgba(21, 114, 232, 0.2);
         }
 
         .pro-title {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Resume;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ResumeTemplate;
 use App\Http\Controllers\Controller;
@@ -15,7 +16,12 @@ class TemplateController extends Controller
     {
         $templates = ResumeTemplate::withCount('resumes')->latest()->paginate(20);
 
-        return view('admin.resume_templates.index', compact('templates'));
+        // Get current user's resume template IDs to show which templates they've already used
+        $userResumeTemplateIds = Resume::where('user_id', auth()->id())
+            ->pluck('resume_template_id')
+            ->toArray();
+
+        return view('admin.resume_templates.index', compact('templates', 'userResumeTemplateIds'));
     }
 
 
@@ -34,7 +40,7 @@ class TemplateController extends Controller
         // Set defaults
         $validated['is_premium'] = $request->boolean('is_premium', false);
         $validated['locale'] = $request->input('locale', 'en');
-        $validated['slug'] = \Illuminate\Support\Str::slug($validated['name']);
+        $validated['slug'] = Str::slug($validated['name']);
 
         ResumeTemplate::create($validated);
 
@@ -103,7 +109,7 @@ class TemplateController extends Controller
         ]);
 
         $validated['is_premium'] = $request->boolean('is_premium', $template->is_premium);
-        $validated['slug'] = \Illuminate\Support\Str::slug($validated['name']);
+        $validated['slug'] = Str::slug($validated['name']);
 
         $template->update($validated);
 
@@ -136,17 +142,28 @@ class TemplateController extends Controller
     {
         $user = auth()->user();
 
-        // Create resume for authenticated user
+        // Check if user already has a resume with this template
+        $existingResume = Resume::where('user_id', $user->id)
+            ->where('resume_template_id', $template->id)
+            ->first();
+
+        // If resume exists, redirect to edit it instead of creating new one
+        if ($existingResume) {
+            return redirect()->route('admin.resumes.edit', $existingResume)
+                ->with('info', 'You already have a resume with this template. Continue editing your existing resume.');
+        }
+
+        // Create new resume for authenticated user
         $resume = Resume::create([
             'user_id' => $user->id,
             'resume_template_id' => $template->id,
             'title' => $template->name . ' Resume',
-            'slug' => \Illuminate\Support\Str::slug($template->name . '-resume-' . $user->id . '-' . time()),
+            'slug' => Str::slug($template->name . '-resume-' . $user->id . '-' . time()),
             'data' => [
                 'summary' => 'Add your professional summary here...',
             ],
             'is_public' => false,
-            'share_token' => \Illuminate\Support\Str::random(32),
+            'share_token' => Str::random(32),
             'completeness_score' => 0,
             'status' => 'draft',
             'language' => 'en',

@@ -98,10 +98,93 @@ class ResumeController extends Controller
 
     public function destroy(Resume $resume)
     {
-        $resume->delete();
+        try {
+            // Check if user owns this resume
+            if ($resume->user_id !== auth()->id()) {
+                \Log::warning('Unauthorized delete attempt', [
+                    'resume_id' => $resume->id,
+                    'owner_id' => $resume->user_id,
+                    'attempted_by' => auth()->id()
+                ]);
 
-        return redirect()->route('admin.resumes.index')
-            ->with('success', 'Resume deleted successfully');
+                if (request()->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'You do not have permission to delete this resume'
+                    ], 403);
+                }
+
+                return redirect()->route('admin.resumes.index')
+                    ->with('error', 'You do not have permission to delete this resume');
+            }
+
+            \Log::info('Starting resume deletion', [
+                'resume_id' => $resume->id,
+                'user_id' => auth()->id(),
+                'title' => $resume->title
+            ]);
+
+            // Delete profile image if exists
+            $data = $resume->data ?? [];
+            if (!empty($data['profile_image'])) {
+                $imagePath = $data['profile_image'];
+                if (\Storage::disk('public')->exists($imagePath)) {
+                    \Storage::disk('public')->delete($imagePath);
+                    \Log::info('Profile image deleted', ['path' => $imagePath]);
+                }
+            }
+
+            // Store resume ID before deletion
+            $resumeId = $resume->id;
+            $resumeTitle = $resume->title;
+
+            // Delete all related records
+            $resume->experiences()->delete();
+            \Log::info('Experiences deleted', ['resume_id' => $resumeId]);
+
+            $resume->educations()->delete();
+            \Log::info('Educations deleted', ['resume_id' => $resumeId]);
+
+            $resume->skills()->delete();
+            \Log::info('Skills deleted', ['resume_id' => $resumeId]);
+
+            $resume->projects()->delete();
+            \Log::info('Projects deleted', ['resume_id' => $resumeId]);
+
+            // Delete the resume
+            $resume->delete();
+
+            \Log::info('Resume deleted successfully', [
+                'resume_id' => $resumeId,
+                'title' => $resumeTitle
+            ]);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Resume deleted successfully'
+                ]);
+            }
+
+            return redirect()->route('admin.resumes.index')
+                ->with('success', 'Resume "' . $resumeTitle . '" deleted successfully');
+        } catch (\Exception $e) {
+            \Log::error('Error deleting resume', [
+                'resume_id' => $resume->id ?? null,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to delete resume: ' . $e->getMessage()
+                ], 500);
+            }
+
+            return redirect()->route('admin.resumes.index')
+                ->with('error', 'Failed to delete resume: ' . $e->getMessage());
+        }
     }
 
     // Experience Methods
@@ -285,22 +368,144 @@ class ResumeController extends Controller
     // About/Summary Update Method
     public function updateAbout(Request $request, Resume $resume)
     {
-        $validated = $request->validate([
-            'summary' => 'nullable|string',
-        ]);
+        try {
+            \Log::info('Update About called', [
+                'resume_id' => $resume->id,
+                'user_id' => auth()->id(),
+                'data' => $request->all()
+            ]);
 
-        // Update resume data
-        $data = $resume->data ?? [];
-        $data['summary'] = $validated['summary'];
-        $resume->update(['data' => $data]);
+            $validated = $request->validate([
+                'summary' => 'nullable|string',
+            ]);
 
-        // Also update user profile summary
-        $resume->user->userProfile()->updateOrCreate(
-            ['user_id' => $resume->user->id],
-            ['summary' => $validated['summary']]
-        );
+            // Update resume data
+            $data = $resume->data ?? [];
+            $data['summary'] = $validated['summary'];
+            $resume->update(['data' => $data]);
 
-        return response()->json(['success' => true, 'message' => 'Summary updated successfully']);
+            // Also update user profile summary
+            $resume->user->userProfile()->updateOrCreate(
+                ['user_id' => $resume->user->id],
+                ['summary' => $validated['summary']]
+            );
+
+            \Log::info('About Me updated successfully');
+
+            return response()->json(['success' => true, 'message' => 'Summary updated successfully']);
+        } catch (\Exception $e) {
+            \Log::error('Error updating About Me: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()], 500);
+        }
+    }
+
+    // Profile Update Method (Name and Job Title)
+    public function updateProfile(Request $request, Resume $resume)
+    {
+        try {
+            \Log::info('Update Profile called', [
+                'resume_id' => $resume->id,
+                'user_id' => auth()->id(),
+                'data' => $request->all()
+            ]);
+
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'title' => 'required|string|max:255',
+            ]);
+
+            // Update user name
+            $resume->user->update(['name' => $validated['name']]);
+
+            // Update resume title
+            $resume->update(['title' => $validated['title']]);
+
+            \Log::info('Profile updated successfully');
+
+            return response()->json(['success' => true, 'message' => 'Profile updated successfully']);
+        } catch (\Exception $e) {
+            \Log::error('Error updating Profile: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()], 500);
+        }
+    }
+
+    // Profile Image Update Method
+    public function updateProfileImage(Request $request, Resume $resume)
+    {
+        try {
+            \Log::info('Update Profile Image called', [
+                'resume_id' => $resume->id,
+                'user_id' => auth()->id(),
+                'has_file' => $request->hasFile('profile_image'),
+                'remove_image' => $request->input('remove_image')
+            ]);
+
+            // Check if user wants to remove the image
+            if ($request->input('remove_image') == '1') {
+                $data = $resume->data ?? [];
+
+                // Delete old image file if exists
+                if (!empty($data['profile_image'])) {
+                    \Storage::disk('public')->delete($data['profile_image']);
+                }
+
+                // Remove profile_image from data
+                unset($data['profile_image']);
+                $resume->update(['data' => $data]);
+
+                \Log::info('Profile image removed successfully');
+                return response()->json(['success' => true, 'message' => 'Profile image removed successfully']);
+            }
+
+            // Validate image upload
+            $request->validate([
+                'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            // Get current data
+            $data = $resume->data ?? [];
+
+            // Delete old image if exists
+            if (!empty($data['profile_image'])) {
+                \Storage::disk('public')->delete($data['profile_image']);
+            }
+
+            // Store new image
+            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+
+            // Update resume data
+            $data['profile_image'] = $imagePath;
+            $resume->update(['data' => $data]);
+
+            \Log::info('Profile image updated successfully', ['path' => $imagePath]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Profile image updated successfully',
+                'image_path' => $imagePath
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation error updating profile image', [
+                'errors' => $e->errors()
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            \Log::error('Error updating profile image: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     // Reference Methods (if you have a ResumeReference model)

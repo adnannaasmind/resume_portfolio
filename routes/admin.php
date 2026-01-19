@@ -73,9 +73,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         // Contact & About
         Route::put('contact', [ResumeController::class, 'updateContact'])->name('contact.update');
         Route::put('about', [ResumeController::class, 'updateAbout'])->name('about.update');
-
-        // References
-        Route::post('references', [ResumeController::class, 'storeReference'])->name('references.store');
+        Route::put('profile', [ResumeController::class, 'updateProfile'])->name('profile.update');
+        Route::post('profile-image', [ResumeController::class, 'updateProfileImage'])->name('profile-image.update');
         Route::put('references/{reference}', [ResumeController::class, 'updateReference'])->name('references.update');
         Route::delete('references/{reference}', [ResumeController::class, 'deleteReference'])->name('references.delete');
     });
