@@ -14,6 +14,8 @@ use App\Models\ResumeSkill;
 use App\Models\ResumeTemplate;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
 
 class ResumeController extends Controller
 {
@@ -673,5 +675,57 @@ class ResumeController extends Controller
         $highlight->delete();
 
         return response()->json(['success' => true, 'message' => 'Highlight deleted successfully']);
+    }
+
+    /**
+     * Download resume as PDF
+     */
+    public function download(Resume $resume)
+    {
+        // Load all relationships
+        $resume->load([
+            'user',
+            'user.userProfile',
+            'template',
+            'experiences',
+            'educations',
+            'skills',
+            'projects',
+            'achievements',
+            'passions',
+            'highlights'
+        ]);
+
+        // Get the template blade file
+        $templateFile = $resume->template && $resume->template->blade_file
+            ? $resume->template->blade_file
+            : 'admin.resume_templates.template_free';
+
+        // Render the template HTML
+        $html = view($templateFile, [
+            'resume' => $resume,
+            'template' => $resume->template,
+            'isEditMode' => false,
+            'isPdfMode' => true
+        ])->render();
+
+        // Generate PDF using dompdf
+        $pdf = Pdf::loadHTML($html)
+            ->setPaper('a4', 'portrait')
+            ->setOptions([
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+                'defaultFont' => 'sans-serif',
+                'margin_top' => 0,
+                'margin_right' => 0,
+                'margin_bottom' => 0,
+                'margin_left' => 0,
+            ]);
+
+        // Generate filename
+        $filename = Str::slug($resume->title ?: 'resume') . '-' . date('Y-m-d') . '.pdf';
+
+        // Download PDF
+        return $pdf->download($filename);
     }
 }

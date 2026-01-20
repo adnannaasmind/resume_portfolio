@@ -521,10 +521,21 @@
                 box-shadow: none;
             }
         }
+
+        /* PDF Export Styles */
+        @media print, (min-width: 0) {
+            .edit-mode-btn,
+            .edit-icon,
+            .item-actions,
+            .edit-sidebar,
+            .edit-sidebar-overlay {
+                display: none !important;
+            }
+        }
     </style>
 
     <div class="resume-template-wrapper template-premium">
-        @if(!($isEditMode ?? false))
+        @if(!($isEditMode ?? false) && !($isPdfMode ?? false))
             <div
                 style="background: #fff3cd; border: 1px solid #ffc107; color: #856404; padding: 15px; margin: 20px; border-radius: 5px; text-align: center; font-size: 14px;">
                 <strong>📋 Preview Mode:</strong> This is a template preview with sample data.

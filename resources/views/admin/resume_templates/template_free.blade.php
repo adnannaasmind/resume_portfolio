@@ -541,10 +541,25 @@
         .resume-template-wrapper .item-actions .btn-danger:hover {
             background: #c82333;
         }
+
+        /* PDF Export Styles */
+        @media print,
+        (min-width: 0) {
+
+            .toolbar,
+            .edit-mode-btn,
+            .edit-icon,
+            .item-actions,
+            .edit-sidebar,
+            .edit-sidebar-overlay,
+            .profile-img-edit {
+                display: none !important;
+            }
+        }
     </style>
 
     <div class="resume-template-wrapper template-free">
-        @if (!($isEditMode ?? false))
+        @if (!($isEditMode ?? false) && !($isPdfMode ?? false))
             <div
                 style="background: #fff3cd; border: 1px solid #ffc107; color: #856404; padding: 15px; margin: 20px; border-radius: 5px; text-align: center; font-size: 14px;">
                 <strong>📋 Preview Mode:</strong> This is a template preview with sample data.

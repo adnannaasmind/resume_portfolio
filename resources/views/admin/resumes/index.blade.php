@@ -58,6 +58,10 @@
                                                         class="btn btn-sm btn-warning" title="{{ __('Edit') }}">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
+                                                    <a href="{{ route('admin.resumes.download', $resume) }}"
+                                                        class="btn btn-sm btn-success" title="{{ __('Download PDF') }}">
+                                                        <i class="fas fa-download"></i>
+                                                    </a>
                                                     <form action="{{ route('admin.resumes.destroy', $resume) }}" method="POST"
                                                         style="display: inline;" class="delete-form"
                                                         data-resume-title="{{ $resume->title }}">

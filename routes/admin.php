@@ -48,6 +48,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // My Resume - Full CRUD
     Route::resource('resumes', ResumeController::class);
 
+    // Download Resume as PDF
+    Route::get('resumes/{resume}/download', [ResumeController::class, 'download'])->name('resumes.download');
+
     // Resume Sections Management
     Route::prefix('resumes/{resume}')->name('resumes.')->group(function () {
         // Experiences
