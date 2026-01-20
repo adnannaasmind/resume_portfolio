@@ -75,8 +75,21 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::put('about', [ResumeController::class, 'updateAbout'])->name('about.update');
         Route::put('profile', [ResumeController::class, 'updateProfile'])->name('profile.update');
         Route::post('profile-image', [ResumeController::class, 'updateProfileImage'])->name('profile-image.update');
+
+        // References
+        Route::post('references', [ResumeController::class, 'storeReference'])->name('references.store');
         Route::put('references/{reference}', [ResumeController::class, 'updateReference'])->name('references.update');
         Route::delete('references/{reference}', [ResumeController::class, 'deleteReference'])->name('references.delete');
+
+        // Achievements
+        Route::post('achievements', [ResumeController::class, 'storeAchievement'])->name('achievements.store');
+        Route::put('achievements/{achievement}', [ResumeController::class, 'updateAchievement'])->name('achievements.update');
+        Route::delete('achievements/{achievement}', [ResumeController::class, 'deleteAchievement'])->name('achievements.delete');
+
+        // Passions
+        Route::post('passions', [ResumeController::class, 'storePassion'])->name('passions.store');
+        Route::put('passions/{passion}', [ResumeController::class, 'updatePassion'])->name('passions.update');
+        Route::delete('passions/{passion}', [ResumeController::class, 'deletePassion'])->name('passions.delete');
     });
 
 

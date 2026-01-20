@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Resume;
+use App\Models\ResumeAchievement;
 use App\Models\ResumeEducation;
 use App\Models\ResumeExperience;
+use App\Models\ResumePassion;
 use App\Models\ResumeProject;
 use App\Models\ResumeSkill;
 use App\Models\ResumeTemplate;
@@ -50,7 +52,7 @@ class ResumeController extends Controller
 
     public function show(Resume $resume)
     {
-        $resume->load(['user', 'user.userProfile', 'template', 'experiences', 'educations', 'skills', 'projects']);
+        $resume->load(['user', 'user.userProfile', 'template', 'experiences', 'educations', 'skills', 'projects', 'achievements', 'passions']);
 
         // If template has blade_file specified, use that, otherwise use default
         if ($resume->template && $resume->template->blade_file) {
@@ -63,7 +65,7 @@ class ResumeController extends Controller
 
     public function edit(Resume $resume)
     {
-        $resume->load(['user', 'user.userProfile', 'template', 'experiences', 'educations', 'skills', 'projects']);
+        $resume->load(['user', 'user.userProfile', 'template', 'experiences', 'educations', 'skills', 'projects', 'achievements', 'passions']);
 
         // If template has blade_file, render that template for editing
         if ($resume->template && $resume->template->blade_file) {
@@ -568,5 +570,75 @@ class ResumeController extends Controller
         $resume->update(['data' => $data]);
 
         return response()->json(['success' => true, 'message' => 'Reference deleted successfully']);
+    }
+
+    // Achievement Methods
+    public function storeAchievement(Request $request, Resume $resume)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'date' => 'nullable|date',
+            'issuer' => 'nullable|string|max:255',
+        ]);
+
+        $resume->achievements()->create($validated);
+
+        return response()->json(['success' => true, 'message' => 'Achievement added successfully']);
+    }
+
+    public function updateAchievement(Request $request, Resume $resume, ResumeAchievement $achievement)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'date' => 'nullable|date',
+            'issuer' => 'nullable|string|max:255',
+        ]);
+
+        $achievement->update($validated);
+
+        return response()->json(['success' => true, 'message' => 'Achievement updated successfully']);
+    }
+
+    public function deleteAchievement(Resume $resume, ResumeAchievement $achievement)
+    {
+        $achievement->delete();
+
+        return response()->json(['success' => true, 'message' => 'Achievement deleted successfully']);
+    }
+
+    // Passion Methods
+    public function storePassion(Request $request, Resume $resume)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'icon' => 'nullable|string|max:50',
+        ]);
+
+        $resume->passions()->create($validated);
+
+        return response()->json(['success' => true, 'message' => 'Passion added successfully']);
+    }
+
+    public function updatePassion(Request $request, Resume $resume, ResumePassion $passion)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'icon' => 'nullable|string|max:50',
+        ]);
+
+        $passion->update($validated);
+
+        return response()->json(['success' => true, 'message' => 'Passion updated successfully']);
+    }
+
+    public function deletePassion(Resume $resume, ResumePassion $passion)
+    {
+        $passion->delete();
+
+        return response()->json(['success' => true, 'message' => 'Passion deleted successfully']);
     }
 }

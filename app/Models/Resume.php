@@ -86,7 +86,7 @@ class Resume extends Model
     {
         static::creating(function (self $resume) {
             if (! $resume->slug) {
-                $resume->slug = Str::slug($resume->title.'-'.Str::random(6));
+                $resume->slug = Str::slug($resume->title . '-' . Str::random(6));
             }
 
             if (! $resume->share_token) {
@@ -114,8 +114,8 @@ class Resume extends Model
             'last_exported_at',
         ]);
 
-        $copy->title = $this->title.' Copy';
-        $copy->slug = Str::slug($copy->title.'-'.Str::random(5));
+        $copy->title = $this->title . ' Copy';
+        $copy->slug = Str::slug($copy->title . '-' . Str::random(5));
         $copy->share_token = Str::uuid()->toString();
         $copy->status = 'draft';
         $copy->duplicated_from_id = $this->id;
@@ -153,6 +153,22 @@ class Resume extends Model
             );
         });
 
+        $this->achievements->each(function (ResumeAchievement $achievement) use ($copy) {
+            $copy->achievements()->create(
+                collect($achievement->toArray())
+                    ->except(['id', 'resume_id', 'created_at', 'updated_at'])
+                    ->all()
+            );
+        });
+
+        $this->passions->each(function (ResumePassion $passion) use ($copy) {
+            $copy->passions()->create(
+                collect($passion->toArray())
+                    ->except(['id', 'resume_id', 'created_at', 'updated_at'])
+                    ->all()
+            );
+        });
+
         return $copy;
     }
 
@@ -174,5 +190,15 @@ class Resume extends Model
     public function projects()
     {
         return $this->hasMany(ResumeProject::class);
+    }
+
+    public function achievements()
+    {
+        return $this->hasMany(ResumeAchievement::class);
+    }
+
+    public function passions()
+    {
+        return $this->hasMany(ResumePassion::class);
     }
 }

@@ -59,14 +59,23 @@
                                                     @endif
                                                 </a>
                                                 <div class="shop-details">
-                                                    <form action="{{ route('admin.templates.use', $template) }}" method="POST"
-                                                        style="display: inline;">
-                                                        @csrf
-                                                        <button type="submit" class="adtocart" data-bs-toggle="tooltip"
-                                                            title="{{ $hasResume ? __('Edit Your Resume') : __('Use This Template') }}">
-                                                            <i class="fas fa-{{ $hasResume ? 'edit' : 'plus' }}"></i>
+                                                    @if($hasResume)
+                                                        <form action="{{ route('admin.templates.use', $template) }}" method="POST"
+                                                            style="display: inline;">
+                                                            @csrf
+                                                            <button type="submit" class="adtocart" data-bs-toggle="tooltip"
+                                                                title="{{ __('Edit Your Resume') }}">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <button type="button" class="adtocart use-template-btn"
+                                                            data-template-id="{{ $template->id }}"
+                                                            data-template-name="{{ $template->name }}" data-bs-toggle="tooltip"
+                                                            title="{{ __('Use This Template') }}">
+                                                            <i class="fas fa-plus"></i>
                                                         </button>
-                                                    </form>
+                                                    @endif
                                                     <a href="{{ route('admin.templates.show', $template) }}" class="adtocart"
                                                         data-bs-toggle="tooltip" title="{{ __('Preview') }}">
                                                         <i class="fas fa-eye"></i>
@@ -233,4 +242,89 @@
             color: #1572e8;
         }
     </style>
+
+    <!-- Modal for Resume Title Input -->
+    <div class="modal fade" id="resumeTitleModal" tabindex="-1" aria-labelledby="resumeTitleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resumeTitleModalLabel">
+                        <i class="fas fa-file-alt"></i> {{ __('Create New Resume') }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="createResumeForm" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="resumeTitle" class="form-label">{{ __('Resume Title') }} <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="resumeTitle" name="title"
+                                placeholder="{{ __('e.g., Software Engineer Resume, Marketing Manager CV') }}" required>
+                            <small class="form-text text-muted">
+                                {{ __('Give your resume a descriptive title to help you organize multiple resumes') }}
+                            </small>
+                        </div>
+                        <div class="alert alert-info mb-0">
+                            <i class="fas fa-info-circle"></i> {{ __('Using template') }}: <strong
+                                id="selectedTemplateName"></strong>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times"></i> {{ __('Cancel') }}
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> {{ __('Create Resume') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @push('scripts')
+        <script>
+            $(document).ready(function () {
+                // Initialize tooltips
+                $('[data-bs-toggle="tooltip"]').tooltip();
+
+                // Handle Use Template button click
+                $('.use-template-btn').on('click', function () {
+                    const templateId = $(this).data('template-id');
+                    const templateName = $(this).data('template-name');
+
+                    // Set the template name in modal
+                    $('#selectedTemplateName').text(templateName);
+
+                    // Set the form action
+                    const formAction = "{{ route('admin.templates.use', ':id') }}".replace(':id', templateId);
+                    $('#createResumeForm').attr('action', formAction);
+
+                    // Set default title suggestion
+                    $('#resumeTitle').val(templateName + ' Resume');
+
+                    // Show modal
+                    $('#resumeTitleModal').modal('show');
+                });
+
+                // Handle form submission
+                $('#createResumeForm').on('submit', function (e) {
+                    const title = $('#resumeTitle').val().trim();
+
+                    if (!title) {
+                        e.preventDefault();
+                        alert('{{ __('Please enter a resume title') }}');
+                        return false;
+                    }
+                });
+
+                // Clear form when modal is closed
+                $('#resumeTitleModal').on('hidden.bs.modal', function () {
+                    $('#resumeTitle').val('');
+                    $('#createResumeForm').attr('action', '');
+                });
+            });
+        </script>
+    @endpush
 @endsection

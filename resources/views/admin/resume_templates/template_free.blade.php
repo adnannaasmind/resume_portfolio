@@ -554,7 +554,7 @@
                 </a>
             </div>
         @endif
-        <div class="container">
+        <div class="container" data-resume-id="{{ $resume->id }}">
             <!-- Left Sidebar_template_free -->
             <div class="sidebar_template_free">
                 @php
@@ -573,7 +573,7 @@
                     @endif
 
                     @if ($isEditMode ?? false)
-                        <div class="profile-img-edit" onclick="editCompleteProfile()">
+                        <div class="profile-img-edit" onclick="resumeEditor.editProfileImage()">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -585,14 +585,14 @@
                 <div class="name" style="position: relative;">
                     {{-- @if ($isEditMode ?? false)
                     <svg class="edit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        onclick="editCompleteProfile()" style="cursor: pointer; position: absolute; right: 0; top: 0;">
+                        onclick="resumeEditor.editProfile()" style="cursor: pointer; position: absolute; right: 0; top: 0;">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                     </svg>
                     @endif --}}
-                    <h1>{{ $firstName }}</h1>
+                    <h1 data-profile-name="{{ $resume->user->name }}">{{ $firstName }}</h1>
                     <h1>{{ $lastName }}</h1>
-                    <p class="job-title">{{ $resume->title }}</p>
+                    <p class="job-title" data-profile-title="{{ $resume->title }}">{{ $resume->title }}</p>
                 </div>
 
                 <div class="section">
@@ -605,8 +605,8 @@
                             <h2>Contact</h2>
                         </div>
                         @if ($isEditMode ?? false)
-                            <svg class="edit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="editContact()"
-                                style="cursor: pointer;">
+                            <svg class="edit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                onclick="resumeEditor.editContact()" style="cursor: pointer;">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                             </svg>
@@ -617,14 +617,15 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                         </svg>
-                        <span>{{ $resume->user->userProfile->phone ?? 'N/A' }}</span>
+                        <span
+                            data-contact-phone="{{ $resume->user->userProfile->phone ?? '' }}">{{ $resume->user->userProfile->phone ?? 'N/A' }}</span>
                     </div>
                     <div class="contact-item">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
-                        <span>{{ $resume->user->email }}</span>
+                        <span data-contact-email="{{ $resume->user->email }}">{{ $resume->user->email }}</span>
                     </div>
                     <div class="contact-item">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -633,7 +634,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        <span>{{ $resume->user->userProfile->location ?? 'N/A' }}</span>
+                        <span
+                            data-contact-location="{{ $resume->user->userProfile->location ?? '' }}">{{ $resume->user->userProfile->location ?? 'N/A' }}</span>
                     </div>
                 </div>
 
@@ -647,14 +649,16 @@
                             <h2>About Me</h2>
                         </div>
                         @if ($isEditMode ?? false)
-                            <svg class="edit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" onclick="editAboutMe()"
-                                style="cursor: pointer;">
+                            <svg class="edit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                onclick="resumeEditor.editAbout()" style="cursor: pointer;">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                             </svg>
                         @endif
                     </div>
-                    <p class="about-text">{{ $resume->data['summary'] ?? ($resume->user->userProfile->summary ?? 'N/A') }}
+                    <p class="about-text"
+                        data-about-summary="{{ $resume->data['summary'] ?? ($resume->user->userProfile->summary ?? '') }}">
+                        {{ $resume->data['summary'] ?? ($resume->user->userProfile->summary ?? 'N/A') }}
                     </p>
                 </div>
 
@@ -668,22 +672,22 @@
                             <h2>Skills</h2>
                         </div>
                         @if ($isEditMode ?? false)
-                            <button class="edit-mode-btn" onclick="addSkill()">
+                            <button class="edit-mode-btn" onclick="resumeEditor.addSkill()">
                                 <i class="fas fa-plus"></i> Add
                             </button>
                         @endif
                     </div>
                     <ul class="skills-list">
                         @foreach ($resume->skills as $skill)
-                            <li style="position: relative; padding-right: 60px;">
+                            <li style="position: relative; padding-right: 60px;" data-skill-id="{{ $skill->id }}"
+                                data-name="{{ $skill->name }}" data-level="{{ $skill->level ?? '' }}">
                                 {{ $skill->name }}
                                 @if ($isEditMode ?? false)
                                     <div class="item-actions" style="position: absolute; right: 0; top: 0;">
-                                        <button class="btn btn-sm btn-info"
-                                            onclick="editSkill({{ $skill->id }}, '{{ addslashes($skill->name) }}', '{{ $skill->level ?? '' }}')">
+                                        <button class="btn btn-sm btn-info" onclick="resumeEditor.editSkill({{ $skill->id }})">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-danger" onclick="deleteSkill({{ $skill->id }})">
+                                        <button class="btn btn-sm btn-danger" onclick="resumeEditor.deleteSkill({{ $skill->id }})">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -716,21 +720,24 @@
                             <h2>Education</h2>
                         </div>
                         @if ($isEditMode ?? false)
-                            <button class="edit-mode-btn" onclick="addEducation()">
+                            <button class="edit-mode-btn" onclick="resumeEditor.addEducation()">
                                 <i class="fas fa-plus"></i> Add
                             </button>
                         @endif
                     </div>
 
                     @foreach ($resume->educations as $education)
-                        <div class="timeline-item" style="padding-right: 100px;">
+                        <div class="timeline-item" style="padding-right: 100px;" data-education-id="{{ $education->id }}"
+                            data-degree="{{ $education->degree }}" data-institution="{{ $education->institution }}"
+                            data-start-date="{{ $education->start_date }}" data-end-date="{{ $education->end_date ?? '' }}"
+                            data-description="{{ $education->description ?? '' }}">
                             @if ($isEditMode ?? false)
                                 <div class="item-actions">
-                                    <button class="btn btn-sm btn-info"
-                                        onclick="editEducation({{ $education->id }}, '{{ addslashes($education->degree) }}', '{{ addslashes($education->institution) }}', '{{ $education->start_date }}', '{{ $education->end_date ?? '' }}', '{{ addslashes($education->description ?? '') }}')">
+                                    <button class="btn btn-sm btn-info" onclick="resumeEditor.editEducation({{ $education->id }})">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger" onclick="deleteEducation({{ $education->id }})">
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="resumeEditor.deleteEducation({{ $education->id }})">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -761,21 +768,27 @@
                             <h2>Experience</h2>
                         </div>
                         @if ($isEditMode ?? false)
-                            <button class="edit-mode-btn" onclick="addExperience()">
+                            <button class="edit-mode-btn" onclick="resumeEditor.addExperience()">
                                 <i class="fas fa-plus"></i> Add
                             </button>
                         @endif
                     </div>
 
                     @foreach ($resume->experiences as $experience)
-                        <div class="timeline-item" style="padding-right: 100px;">
+                        <div class="timeline-item" style="padding-right: 100px;" data-experience-id="{{ $experience->id }}"
+                            data-title="{{ $experience->title }}" data-company="{{ $experience->company }}"
+                            data-location="{{ $experience->location ?? '' }}" data-start-date="{{ $experience->start_date }}"
+                            data-end-date="{{ $experience->end_date ?? '' }}"
+                            data-is-current="{{ $experience->is_current ? 'true' : 'false' }}"
+                            data-description="{{ $experience->description ?? '' }}">
                             @if ($isEditMode ?? false)
                                 <div class="item-actions">
                                     <button class="btn btn-sm btn-info"
-                                        onclick="editExperience({{ $experience->id }}, '{{ addslashes($experience->title) }}', '{{ addslashes($experience->company) }}', '{{ $experience->start_date }}', '{{ $experience->end_date ?? '' }}', {{ $experience->is_current ? 1 : 0 }}, '{{ addslashes($experience->description ?? '') }}')">
+                                        onclick="resumeEditor.editExperience({{ $experience->id }})">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger" onclick="deleteExperience({{ $experience->id }})">
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="resumeEditor.deleteExperience({{ $experience->id }})">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -804,7 +817,7 @@
                             <h2>References</h2>
                         </div>
                         @if ($isEditMode ?? false)
-                            <button class="edit-mode-btn" onclick="addReference()">
+                            <button class="edit-mode-btn" onclick="resumeEditor.addReference()">
                                 <i class="fas fa-plus"></i> Add
                             </button>
                         @endif
@@ -815,14 +828,18 @@
                             $references = $resume->data['references'] ?? [];
                         @endphp
                         @forelse($references as $reference)
-                            <div class="reference-card" style="position: relative; padding-right: 60px;">
+                            <div class="reference-card" style="position: relative; padding-right: 60px;"
+                                data-reference-id="{{ $reference['id'] }}" data-name="{{ $reference['name'] }}"
+                                data-position="{{ $reference['title'] }}" data-company="{{ $reference['company'] ?? '' }}"
+                                data-phone="{{ $reference['phone'] ?? '' }}" data-email="{{ $reference['email'] ?? '' }}">
                                 @if ($isEditMode ?? false)
                                     <div class="item-actions" style="position: absolute; right: 10px; top: 10px;">
                                         <button class="btn btn-sm btn-info"
-                                            onclick="editReference({{ $reference['id'] }}, '{{ addslashes($reference['name']) }}', '{{ addslashes($reference['title']) }}', '{{ addslashes($reference['company'] ?? '') }}', '{{ $reference['phone'] ?? '' }}', '{{ $reference['email'] ?? '' }}')">
+                                            onclick="resumeEditor.editReference({{ $reference['id'] }})">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-danger" onclick="deleteReference({{ $reference['id'] }})">
+                                        <button class="btn btn-sm btn-danger"
+                                            onclick="resumeEditor.deleteReference({{ $reference['id'] }})">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -858,1028 +875,24 @@
         <div class="edit-sidebar" id="editSidebar">
             <div class="edit-sidebar-header">
                 <h3 id="editSidebarTitle">Add Item</h3>
-                <button class="edit-sidebar-close" onclick="closeEditSidebar()">&times;</button>
+                <button class="edit-sidebar-close" onclick="resumeEditor.closeSidebar()">&times;</button>
             </div>
-            <div class="edit-sidebar-body" id="editSidebarContent">
+            <div class="edit-sidebar-body" id="editSidebarBody">
                 <!-- Dynamic content will be loaded here -->
             </div>
         </div>
 
-        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-
-        <script>
-            // Setup CSRF token for all AJAX requests
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
-                '{{ csrf_token() }}';
-
-            console.log('CSRF Token loaded:', csrfToken ? 'Found' : 'Not found');
-            console.log('Meta tag present:', document.querySelector('meta[name="csrf-token"]') ? 'Yes' : 'No');
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken
-                }
-            });
-
-            function openEditSidebar() {
-                document.getElementById('editSidebar').classList.add('active');
-                document.getElementById('editSidebarOverlay').classList.add('active');
-            }
-
-            function closeEditSidebar() {
-                document.getElementById('editSidebar').classList.remove('active');
-                document.getElementById('editSidebarOverlay').classList.remove('active');
-            }
-
-            // Experience Functions
-            function addExperience() {
-                document.getElementById('editSidebarTitle').textContent = 'Add Experience';
-                document.getElementById('editSidebarContent').innerHTML =
-                    `<form id="experienceForm" onsubmit="saveExperience(event)">
-                                                                                                                                                                                                                                                    <input type="hidden" id="exp_action" value="add">
-                                                                                                                                                                                                                                                    <input type="hidden" id="exp_id" value="">
-
-                                                                                                                                                                                                                                                    <div class="edit-form-group">
-                                                                                                                                                                                                                                                        <label class="edit-form-label">Job Title *</label>
-                                                                                                                                                                                                                                                        <input type="text" class="edit-form-input" id="exp_title" required>
-                                                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                                                    <div class="edit-form-group">
-                                                                                                                                                                                                                                                        <label class="edit-form-label">Company *</label>
-                                                                                                                                                                                                                                                        <input type="text" class="edit-form-input" id="exp_company" required>
-                                                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                                                    <div class="edit-form-group">
-                                                                                                                                                                                                                                                        <label class="edit-form-label">Start Date *</label>
-                                                                                                                                                                                                                                                        <input type="date" class="edit-form-input" id="exp_start_date" required>
-                                                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                                                    <div class="edit-form-group">
-                                                                                                                                                                                                                                                        <label class="edit-form-label">End Date</label>
-                                                                                                                                                                                                                                                        <input type="date" class="edit-form-input" id="exp_end_date">
-                                                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                                                    <div class="edit-form-group">
-                                                                                                                                                                                                                                                        <div class="edit-form-checkbox">
-                                                                                                                                                                                                                                                            <input type="checkbox" id="exp_is_current">
-                                                                                                                                                                                                                                                            <label class="edit-form-label" style="margin: 0;">Currently Working Here</label>
-                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                                                    <div class="edit-form-group">
-                                                                                                                                                                                                                                                        <label class="edit-form-label">Description</label>
-                                                                                                                                                                                                                                                        <textarea class="edit-form-textarea" id="exp_description" rows="4"></textarea>
-                                                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                                                    <div class="edit-form-actions">
-                                                                                                                                                                                                                                                        <button type="button" class="edit-btn-secondary" onclick="closeEditSidebar()">Cancel</button>
-                                                                                                                                                                                                                                                        <button type="submit" class="edit-btn-primary">Save</button>
-                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                </form>
-                                                                                                                                                                                                                                            `;
-                openEditSidebar();
-            }
-
-            function editExperience(id, title, company, startDate, endDate, isCurrent, description) {
-                document.getElementById('editSidebarTitle').textContent = 'Edit Experience';
-                document.getElementById('editSidebarContent').innerHTML =
-                    `<form id="experienceForm" onsubmit="saveExperience(event)">
-                                                                                                                                                                                                                                        <input type="hidden" id="exp_action" value="edit">
-                                                                                                                                                                                                                                        <input type="hidden" id="exp_id" value="${id}">
-
-                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                            <label class="edit-form-label">Job Title *</label>
-                                                                                                                                                                                                                                            <input type="text" class="edit-form-input" id="exp_title" value="${title}" required>
-                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                            <label class="edit-form-label">Company *</label>
-                                                                                                                                                                                                                                            <input type="text" class="edit-form-input" id="exp_company" value="${company}" required>
-                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                            <label class="edit-form-label">Start Date *</label>
-                                                                                                                                                                                                                                            <input type="date" class="edit-form-input" id="exp_start_date" value="${startDate}" required>
-                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                            <label class="edit-form-label">End Date</label>
-                                                                                                                                                                                                                                            <input type="date" class="edit-form-input" id="exp_end_date" value="${endDate}">
-                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                            <div class="edit-form-checkbox">
-                                                                                                                                                                                                                                                <input type="checkbox" id="exp_is_current" ${isCurrent ? 'checked' : ''}>
-                                                                                                                                                                                                                                                <label class="edit-form-label" style="margin: 0;">Currently Working Here</label>
-                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                            <label class="edit-form-label">Description</label>
-                                                                                                                                                                                                                                            <textarea class="edit-form-textarea" id="exp_description" rows="4">${description}</textarea>
-                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                        <div class="edit-form-actions">
-                                                                                                                                                                                                                                            <button type="button" class="edit-btn-secondary" onclick="closeEditSidebar()">Cancel</button>
-                                                                                                                                                                                                                                            <button type="submit" class="edit-btn-primary">Update</button>
-                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                    </form>`;
-                openEditSidebar();
-            }
-
-            function saveExperience(event) {
-                event.preventDefault();
-                const action = document.getElementById('exp_action').value;
-                const id = document.getElementById('exp_id').value;
-
-                const data = {
-                    _token: csrfToken,
-                    title: document.getElementById('exp_title').value,
-                    company: document.getElementById('exp_company').value,
-                    start_date: document.getElementById('exp_start_date').value,
-                    end_date: document.getElementById('exp_end_date').value,
-                    is_current: document.getElementById('exp_is_current').checked ? 1 : 0,
-                    description: document.getElementById('exp_description').value
-                };
-
-                if (action === 'add') {
-                    $.post(`/admin/resumes/{{ $resume->id }}/experiences`, data, function (response) {
-                        location.reload();
-                    }).fail(function () {
-                        alert('Error adding experience');
-                    });
-                } else {
-                    $.ajax({
-                        url: `/admin/resumes/{{ $resume->id }}/experiences/${id}`,
-                        method: 'PUT',
-                        data: data,
-                        success: function (response) {
-                            location.reload();
-                        },
-                        error: function () {
-                            alert('Error updating experience');
-                        }
-                    });
-                }
-            }
-
-            function deleteExperience(id) {
-                if (confirm('Are you sure you want to delete this experience?')) {
-                    $.ajax({
-                        url: `/admin/resumes/{{ $resume->id }}/experiences/${id}`,
-                        method: 'DELETE',
-                        success: function (response) {
-                            location.reload();
-                        },
-                        error: function () {
-                            alert('Error deleting experience');
-                        }
-                    });
-                }
-            }
-
-            // Education Functions
-            function addEducation() {
-                document.getElementById('editSidebarTitle').textContent = 'Add Education';
-                document.getElementById('editSidebarContent').innerHTML =
-                    `<form id="educationForm" onsubmit="saveEducation(event)">
-                                                                                                                                                                                                                    <input type="hidden" id="edu_action" value="add">
-                                                                                                                                                                                                                    <input type="hidden" id="edu_id" value="">
-
-                                                                                                                                                                                                                    <div class="edit-form-group">
-                                                                                                                                                                                                                        <label class="edit-form-label">Degree *</label>
-                                                                                                                                                                                                                        <input type="text" class="edit-form-input" id="edu_degree" required>
-                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                    <div class="edit-form-group">
-                                                                                                                                                                                                                        <label class="edit-form-label">Institution *</label>
-                                                                                                                                                                                                                        <input type="text" class="edit-form-input" id="edu_institution" required>
-                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                    <div class="edit-form-group">
-                                                                                                                                                                                                                        <label class="edit-form-label">Start Date *</label>
-                                                                                                                                                                                                                        <input type="date" class="edit-form-input" id="edu_start_date" required>
-                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                    <div class="edit-form-group">
-                                                                                                                                                                                                                        <label class="edit-form-label">End Date</label>
-                                                                                                                                                                                                                        <input type="date" class="edit-form-input" id="edu_end_date">
-                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                    <div class="edit-form-group">
-                                                                                                                                                                                                                        <label class="edit-form-label">Description</label>
-                                                                                                                                                                                                                        <textarea class="edit-form-textarea" id="edu_description" rows="4"></textarea>
-                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                    <div class="edit-form-actions">
-                                                                                                                                                                                                                        <button type="button" class="edit-btn-secondary" onclick="closeEditSidebar()">Cancel</button>
-                                                                                                                                                                                                                        <button type="submit" class="edit-btn-primary">Save</button>
-                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                </form>`;
-                openEditSidebar();
-            }
-
-            function editEducation(id, degree, institution, startDate, endDate, description) {
-                document.getElementById('editSidebarTitle').textContent = 'Edit Education';
-                document.getElementById('editSidebarContent').innerHTML = `<form id="educationForm" onsubmit="saveEducation(event)">
-                                                                                                                                                                                                <input type="hidden" id="edu_action" value="edit">
-                                                                                                                                                                                                <input type="hidden" id="edu_id" value="${id}">
-
-                                                                                                                                                                                                <div class="edit-form-group">
-                                                                                                                                                                                                    <label class="edit-form-label">Degree *</label>
-                                                                                                                                                                                                    <input type="text" class="edit-form-input" id="edu_degree" value="${degree}" required>
-                                                                                                                                                                                                </div>
-
-                                                                                                                                                                                                <div class="edit-form-group">
-                                                                                                                                                                                                    <label class="edit-form-label">Institution *</label>
-                                                                                                                                                                                                    <input type="text" class="edit-form-input" id="edu_institution" value="${institution}" required>
-                                                                                                                                                                                                </div>
-
-                                                                                                                                                                                                <div class="edit-form-group">
-                                                                                                                                                                                                    <label class="edit-form-label">Start Date *</label>
-                                                                                                                                                                                                    <input type="date" class="edit-form-input" id="edu_start_date" value="${startDate}" required>
-                                                                                                                                                                                                </div>
-
-                                                                                                                                                                                                <div class="edit-form-group">
-                                                                                                                                                                                                    <label class="edit-form-label">End Date</label>
-                                                                                                                                                                                                    <input type="date" class="edit-form-input" id="edu_end_date" value="${endDate}">
-                                                                                                                                                                                                </div>
-
-                                                                                                                                                                                                <div class="edit-form-group">
-                                                                                                                                                                                                    <label class="edit-form-label">Description</label>
-                                                                                                                                                                                                    <textarea class="edit-form-textarea" id="edu_description" rows="4">${description}</textarea>
-                                                                                                                                                                                                </div>
-
-                                                                                                                                                                                                <div class="edit-form-actions">
-                                                                                                                                                                                                    <button type="button" class="edit-btn-secondary" onclick="closeEditSidebar()">Cancel</button>
-                                                                                                                                                                                                    <button type="submit" class="edit-btn-primary">Update</button>
-                                                                                                                                                                                                </div>
-                                                                                                                                                                                            </form>`;
-                openEditSidebar();
-            }
-
-            function saveEducation(event) {
-                event.preventDefault();
-                const action = document.getElementById('edu_action').value;
-                const id = document.getElementById('edu_id').value;
-
-                const data = {
-                    _token: csrfToken,
-                    degree: document.getElementById('edu_degree').value,
-                    institution: document.getElementById('edu_institution').value,
-                    start_date: document.getElementById('edu_start_date').value,
-                    end_date: document.getElementById('edu_end_date').value,
-                    description: document.getElementById('edu_description').value
-                };
-
-                if (action === 'add') {
-                    $.post(`/admin/resumes/{{ $resume->id }}/educations`, data, function (response) {
-                        location.reload();
-                    }).fail(function () {
-                        alert('Error adding education');
-                    });
-                } else {
-                    $.ajax({
-                        url: `/admin/resumes/{{ $resume->id }}/educations/${id}`,
-                        method: 'PUT',
-                        data: data,
-                        success: function (response) {
-                            location.reload();
-                        },
-                        error: function () {
-                            alert('Error updating education');
-                        }
-                    });
-                }
-            }
-
-            function deleteEducation(id) {
-                if (confirm('Are you sure you want to delete this education?')) {
-                    $.ajax({
-                        url: `/admin/resumes/{{ $resume->id }}/educations/${id}`,
-                        method: 'DELETE',
-                        success: function (response) {
-                            location.reload();
-                        },
-                        error: function () {
-                            alert('Error deleting education');
-                        }
-                    });
-                }
-            }
-
-            // Skill Functions
-            function addSkill() {
-                document.getElementById('editSidebarTitle').textContent = 'Add Skill';
-                document.getElementById('editSidebarContent').innerHTML =
-                    `<form id="skillForm" onsubmit="saveSkill(event)">
-                                                                                                                                                                                                                        <input type="hidden" id="skill_action" value="add">
-                                                                                                                                                                                                                        <input type="hidden" id="skill_id" value="">
-
-                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                            <label class="edit-form-label">Skill Name *</label>
-                                                                                                                                                                                                                            <input type="text" class="edit-form-input" id="skill_name" required>
-                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                            <label class="edit-form-label">Level</label>
-                                                                                                                                                                                                                            <select class="edit-form-select" id="skill_level">
-                                                                                                                                                                                                                                <option value="">Select Level</option>
-                                                                                                                                                                                                                                <option value="Beginner">Beginner</option>
-                                                                                                                                                                                                                                <option value="Intermediate">Intermediate</option>
-                                                                                                                                                                                                                                <option value="Advanced">Advanced</option>
-                                                                                                                                                                                                                                <option value="Expert">Expert</option>
-                                                                                                                                                                                                                            </select>
-                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                        <div class="edit-form-actions">
-                                                                                                                                                                                                                            <button type="button" class="edit-btn-secondary" onclick="closeEditSidebar()">Cancel</button>
-                                                                                                                                                                                                                            <button type="submit" class="edit-btn-primary">Save</button>
-                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                    </form>`;
-                openEditSidebar();
-            }
-
-            function editSkill(id, name, level) {
-                document.getElementById('editSidebarTitle').textContent = 'Edit Skill';
-                document.getElementById('editSidebarContent').innerHTML =
-                    `
-                                                                                                                                                                                                                                                                                                                                                                            <form id="skillForm" onsubmit="saveSkill(event)">
-                                                                                                                                                                                                                                                                                                                                                                                <input type="hidden" id="skill_action" value="edit">
-                                                                                                                                                                                                                                                                                                                                                                                <input type="hidden" id="skill_id" value="${id}">
-
-                                                                                                                                                                                                                                                                                                                                                                                <div class="edit-form-group">
-                                                                                                                                                                                                                                                                                                                                                                                    <label class="edit-form-label">Skill Name *</label>
-                                                                                                                                                                                                                                                                                                                                                                                    <input type="text" class="edit-form-input" id="skill_name" value="${name}" required>
-                                                                                                                                                                                                                                                                                                                                                                                </div>
-
-                                                                                                                                                                                                                                                                                                                                                                                <div class="edit-form-group">
-                                                                                                                                                                                                                                                                                                                                                                                    <label class="edit-form-label">Level</label>
-                                                                                                                                                                                                                                                                                                                                                                                    <select class="edit-form-select" id="skill_level">
-                                                                                                                                                                                                                                                                                                                                                                                        <option value="">Select Level</option>
-                                                                                                                                                                                                                                                                                                                                                                                        <option value="Beginner" ${level === 'Beginner' ? 'selected' : ''}>Beginner</option>
-                                                                                                                                                                                                                                                                                                                                                                                        <option value="Intermediate" ${level === 'Intermediate' ? 'selected' : ''}>Intermediate</option>
-                                                                                                                                                                                                                                                                                                                                                                                        <option value="Advanced" ${level === 'Advanced' ? 'selected' : ''}>Advanced</option>
-                                                                                                                                                                                                                                                                                                                                                                                        <option value="Expert" ${level === 'Expert' ? 'selected' : ''}>Expert</option>
-                                                                                                                                                                                                                                                                                                                                                                                    </select>
-                                                                                                                                                                                                                                                                                                                                                                                </div>
-
-                                                                                                                                                                                                                                                                                                                                                                                <div class="edit-form-actions">
-                                                                                                                                                                                                                                                                                                                                                                                    <button type="button" class="edit-btn-secondary" onclick="closeEditSidebar()">Cancel</button>
-                                                                                                                                                                                                                                                                                                                                                                                    <button type="submit" class="edit-btn-primary">Update</button>
-                                                                                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                                                                            </form>
-                                                                                                                                                                                                                                                                                                                                                                        `;
-                openEditSidebar();
-            }
-
-            function saveSkill(event) {
-                event.preventDefault();
-                const action = document.getElementById('skill_action').value;
-                const id = document.getElementById('skill_id').value;
-
-                const data = {
-                    _token: csrfToken,
-                    name: document.getElementById('skill_name').value,
-                    level: document.getElementById('skill_level').value
-                };
-
-                if (action === 'add') {
-                    $.post(`/admin/resumes/{{ $resume->id }}/skills`, data, function (response) {
-                        location.reload();
-                    }).fail(function () {
-                        alert('Error adding skill');
-                    });
-                } else {
-                    $.ajax({
-                        url: `/admin/resumes/{{ $resume->id }}/skills/${id}`,
-                        method: 'PUT',
-                        data: data,
-                        success: function (response) {
-                            location.reload();
-                        },
-                        error: function () {
-                            alert('Error updating skill');
-                        }
-                    });
-                }
-            }
-
-            function deleteSkill(id) {
-                if (confirm('Are you sure you want to delete this skill?')) {
-                    $.ajax({
-                        url: `/admin/resumes/{{ $resume->id }}/skills/${id}`,
-                        method: 'DELETE',
-                        success: function (response) {
-                            location.reload();
-                        },
-                        error: function () {
-                            alert('Error deleting skill');
-                        }
-                    });
-                }
-            }
-
-            // Profile Image Functions
-            function editProfileImage() {
-                const currentImage = '{{ $profileImage ?? "" }}';
-
-                document.getElementById('editSidebarTitle').textContent = 'Edit Profile Image';
-                document.getElementById('editSidebarContent').innerHTML = `
-                                                    <form id="profileImageForm" onsubmit="saveProfileImage(event)" enctype="multipart/form-data">
-                                                        <div class="edit-form-group">
-                                                            <label class="edit-form-label">Profile Image</label>
-                                                            ${currentImage ? `
-                                                                <div style="margin-bottom: 15px; text-align: center;">
-                                                                    <img src="{{ asset('storage/') }}/${currentImage}" alt="Current" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 3px solid #2196F3;">
-                                                                    <p style="margin-top: 10px; font-size: 12px; color: #666;">Current Image</p>
-                                                                </div>
-                                                            ` : ''}
-                                                            <input type="file" class="edit-form-input" id="profile_image" accept="image/*" ${!currentImage ? 'required' : ''}>
-                                                            <small style="color: #666; font-size: 12px; display: block; margin-top: 5px;">
-                                                                Recommended: Square image (e.g., 400x400px), max 2MB
-                                                            </small>
-                                                        </div>
-
-                                                        <div class="edit-form-group">
-                                                            <div style="padding: 10px; background: #f0f8ff; border-radius: 4px; border: 1px solid #2196F3;">
-                                                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin: 0;">
-                                                                    <input type="checkbox" id="remove_image" style="width: 18px; height: 18px;">
-                                                                    <span style="color: #dc3545; font-weight: 600;">Remove current image</span>
-                                                                </label>
-                                                                <small style="color: #666; font-size: 11px; display: block; margin-top: 5px; margin-left: 26px;">
-                                                                    Check this to remove your profile image and show initials instead
-                                                                </small>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="edit-form-actions">
-                                                            <button type="button" class="edit-btn-secondary" onclick="closeEditSidebar()">Cancel</button>
-                                                            <button type="submit" class="edit-btn-primary">Update</button>
-                                                        </div>
-                                                    </form>`;
-
-                // Preview image when selected
-                document.getElementById('profile_image').addEventListener('change', function (e) {
-                    const file = e.target.files[0];
-                    if (file && file.type.startsWith('image/')) {
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
-                            const preview = document.createElement('div');
-                            preview.style.cssText = 'margin-top: 15px; text-align: center;';
-                            preview.innerHTML = `
-                                                                <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Preview:</p>
-                                                                <img src="${e.target.result}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 3px solid #4CAF50;">
-                                                            `;
-                            const existingPreview = document.querySelector('#profileImageForm > div:last-of-type');
-                            const previewContainer = existingPreview.querySelector('div[style*="margin-top: 15px"]');
-                            if (previewContainer) {
-                                previewContainer.remove();
-                            }
-                            existingPreview.appendChild(preview);
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
-
-                openEditSidebar();
-            }
-
-            function saveProfileImage(event) {
-                event.preventDefault();
-
-                const formData = new FormData();
-                formData.append('_token', csrfToken);
-
-                const imageFile = document.getElementById('profile_image').files[0];
-                const removeImage = document.getElementById('remove_image').checked;
-
-                if (removeImage) {
-                    formData.append('remove_image', '1');
-                } else if (imageFile) {
-                    formData.append('profile_image', imageFile);
-                }
-
-                console.log('Uploading profile image...');
-
-                $.ajax({
-                    url: `/admin/resumes/{{ $resume->id }}/profile-image`,
-                    method: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (response) {
-                        console.log('Profile image updated successfully:', response);
-                        location.reload();
-                    },
-                    error: function (xhr) {
-                        console.error('Error updating profile image:', xhr);
-                        const errorMsg = xhr.responseJSON?.message || xhr.responseJSON?.error || xhr.statusText || 'Unknown error';
-                        const errors = xhr.responseJSON?.errors;
-                        let fullError = `Error: ${errorMsg} (Status: ${xhr.status})`;
-                        if (errors) {
-                            fullError += '\nValidation errors: ' + JSON.stringify(errors);
-                        }
-                        alert(fullError);
-                    }
-                });
-            }
-
-            // Complete Profile Editor (Image + Name + Job Title)
-            function editCompleteProfile() {
-                const fullName = '{{ $resume->user->name }}';
-                const jobTitle = '{{ $resume->title }}';
-                const currentImage = '{{ $profileImage ?? "" }}';
-
-                document.getElementById('editSidebarTitle').textContent = 'Edit Profile';
-                document.getElementById('editSidebarContent').innerHTML = `
-                                            <form id="completeProfileForm" onsubmit="saveCompleteProfile(event)" enctype="multipart/form-data">
-
-                                                <!-- Profile Image Section -->
-                                                <div class="edit-form-group">
-                                                    <label class="edit-form-label">Profile Image</label>
-                                                    ${currentImage ? `
-                                                        <div style="margin-bottom: 15px; text-align: center;">
-                                                            <img src="{{ asset('storage/') }}/${currentImage}" alt="Current"
-                                                                 style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 3px solid #2196F3;">
-                                                            <p style="margin-top: 10px; font-size: 12px; color: #666;">Current Image</p>
-                                                        </div>
-                                                    ` : `
-                                                        <div style="margin-bottom: 15px; text-align: center;">
-                                                            <div style="width: 150px; height: 150px; margin: 0 auto; border-radius: 50%; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); display: flex; align-items: center; justify-content: center; font-size: 48px; color: white; font-weight: bold; border: 3px solid #2196F3;">
-                                                                {{ strtoupper(substr($resume->user->name, 0, 1)) }}{{ strtoupper(substr(explode(' ', $resume->user->name)[1] ?? '', 0, 1)) }}
-                                                            </div>
-                                                            <p style="margin-top: 10px; font-size: 12px; color: #666;">No image uploaded</p>
-                                                        </div>
-                                                    `}
-                                                    <input type="file" class="edit-form-input" id="complete_profile_image" accept="image/*">
-                                                    <small style="color: #666; font-size: 12px; display: block; margin-top: 5px;">
-                                                        Recommended: Square image (400x400px), max 2MB
-                                                    </small>
-                                                    <div id="imagePreview" style="margin-top: 15px;"></div>
-                                                </div>
-
-                                                ${currentImage ? `
-                                                    <div class="edit-form-group">
-                                                        <div style="padding: 10px; background: #fff3cd; border-radius: 4px; border: 1px solid #ffc107;">
-                                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin: 0;">
-                                                                <input type="checkbox" id="complete_remove_image" style="width: 18px; height: 18px;">
-                                                                <span style="color: #856404; font-weight: 600;">🗑️ Remove current image</span>
-                                                            </label>
-                                                            <small style="color: #856404; font-size: 11px; display: block; margin-top: 5px; margin-left: 26px;">
-                                                                Show initials instead of photo
-                                                            </small>
-                                                        </div>
-                                                    </div>
-                                                ` : ''}
-
-                                                <!-- Name Section -->
-                                                <div class="edit-form-group" style="margin-top: 25px;">
-                                                    <label class="edit-form-label">Full Name *</label>
-                                                    <input type="text" class="edit-form-input" id="complete_profile_name" value="${fullName}" required>
-                                                    <small style="color: #666; font-size: 12px; display: block; margin-top: 5px;">
-                                                        This will update your display name and initials
-                                                    </small>
-                                                </div>
-
-                                                <!-- Job Title Section -->
-                                                <div class="edit-form-group">
-                                                    <label class="edit-form-label">Job Title *</label>
-                                                    <input type="text" class="edit-form-input" id="complete_profile_title" value="${jobTitle}" required>
-                                                    <small style="color: #666; font-size: 12px; display: block; margin-top: 5px;">
-                                                        e.g., Senior Software Engineer, Marketing Manager
-                                                    </small>
-                                                </div>
-
-                                                <div class="edit-form-actions">
-                                                    <button type="button" class="edit-btn-secondary" onclick="closeEditSidebar()">Cancel</button>
-                                                    <button type="submit" class="edit-btn-primary">
-                                                        <i class="fas fa-save"></i> Save All Changes
-                                                    </button>
-                                                </div>
-                                            </form>`;
-
-                // Image preview functionality
-                const imageInput = document.getElementById('complete_profile_image');
-                if (imageInput) {
-                    imageInput.addEventListener('change', function (e) {
-                        const file = e.target.files[0];
-                        const previewDiv = document.getElementById('imagePreview');
-
-                        if (file && file.type.startsWith('image/')) {
-                            // Check file size (2MB)
-                            if (file.size > 2 * 1024 * 1024) {
-                                alert('Image size should not exceed 2MB');
-                                this.value = '';
-                                previewDiv.innerHTML = '';
-                                return;
-                            }
-
-                            const reader = new FileReader();
-                            reader.onload = function (e) {
-                                previewDiv.innerHTML = `
-                                                            <div style="text-align: center;">
-                                                                <p style="font-size: 12px; color: #4CAF50; font-weight: 600; margin-bottom: 10px;">
-                                                                    ✓ New Image Preview:
-                                                                </p>
-                                                                <img src="${e.target.result}"
-                                                                     style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 3px solid #4CAF50;">
-                                                            </div>
-                                                        `;
-                            };
-                            reader.readAsDataURL(file);
-                        } else {
-                            previewDiv.innerHTML = '';
-                        }
-                    });
-                }
-
-                openEditSidebar();
-            }
-
-            function saveCompleteProfile(event) {
-                event.preventDefault();
-
-                // First, update name and job title
-                const profileData = {
-                    _token: csrfToken,
-                    name: document.getElementById('complete_profile_name').value,
-                    title: document.getElementById('complete_profile_title').value
-                };
-
-                console.log('Updating profile (name & title)...');
-
-                $.ajax({
-                    url: `/admin/resumes/{{ $resume->id }}/profile`,
-                    method: 'PUT',
-                    data: profileData,
-                    success: function (response) {
-                        console.log('Profile updated:', response);
-
-                        // Check if image needs to be updated
-                        const imageFile = document.getElementById('complete_profile_image').files[0];
-                        const removeImage = document.getElementById('complete_remove_image')?.checked;
-
-                        if (imageFile || removeImage) {
-                            // Update image
-                            const imageFormData = new FormData();
-                            imageFormData.append('_token', csrfToken);
-
-                            if (removeImage) {
-                                imageFormData.append('remove_image', '1');
-                            } else if (imageFile) {
-                                imageFormData.append('profile_image', imageFile);
-                            }
-
-                            console.log('Updating profile image...');
-
-                            $.ajax({
-                                url: `/admin/resumes/{{ $resume->id }}/profile-image`,
-                                method: 'POST',
-                                data: imageFormData,
-                                processData: false,
-                                contentType: false,
-                                success: function (imgResponse) {
-                                    console.log('Profile image updated:', imgResponse);
-                                    // alert('✓ Profile updated successfully!');
-                                    location.reload();
-                                },
-                                error: function (xhr) {
-                                    console.error('Error updating image:', xhr);
-                                    const errorMsg = xhr.responseJSON?.message || xhr.statusText || 'Unknown error';
-                                    alert('Profile saved, but image update failed: ' + errorMsg);
-                                    location.reload();
-                                }
-                            });
-                        } else {
-                            // No image changes, just reload
-                            // alert('✓ Profile updated successfully!');
-                            location.reload();
-                        }
-                    },
-                    error: function (xhr) {
-                        console.error('Error updating profile:', xhr);
-                        const errorMsg = xhr.responseJSON?.message || xhr.statusText || 'Unknown error';
-                        const errors = xhr.responseJSON?.errors;
-                        let fullError = `Error: ${errorMsg} (Status: ${xhr.status})`;
-                        if (errors) {
-                            fullError += '\\nValidation errors: ' + JSON.stringify(errors);
-                        }
-                        alert(fullError);
-                    }
-                });
-            }
-
-            // Profile Functions
-            function editProfile() {
-                const fullName = '{{ $resume->user->name }}';
-                const jobTitle = '{{ $resume->title }}';
-
-                document.getElementById('editSidebarTitle').textContent = 'Edit Profile';
-                document.getElementById('editSidebarContent').innerHTML = `
-                                                            <form id="profileForm" onsubmit="saveProfile(event)">
-                                                                <div class="edit-form-group">
-                                                                    <label class="edit-form-label">Full Name *</label>
-                                                                    <input type="text" class="edit-form-input" id="profile_name" value="${fullName}" required>
-                                                                </div>
-
-                                                                <div class="edit-form-group">
-                                                                    <label class="edit-form-label">Job Title *</label>
-                                                                    <input type="text" class="edit-form-input" id="profile_title" value="${jobTitle}" required>
-                                                                </div>
-
-                                                                <div class="edit-form-actions">
-                                                                    <button type="button" class="edit-btn-secondary" onclick="closeEditSidebar()">Cancel</button>
-                                                                    <button type="submit" class="edit-btn-primary">Update</button>
-                                                                </div>
-                                                            </form>`;
-                openEditSidebar();
-            }
-
-            function saveProfile(event) {
-                event.preventDefault();
-
-                const data = {
-                    _token: csrfToken,
-                    name: document.getElementById('profile_name').value,
-                    title: document.getElementById('profile_title').value
-                };
-
-                console.log('Saving Profile:', data);
-
-                $.ajax({
-                    url: `/admin/resumes/{{ $resume->id }}/profile`,
-                    method: 'PUT',
-                    data: data,
-                    success: function (response) {
-                        console.log('Profile updated successfully:', response);
-                        location.reload();
-                    },
-                    error: function (xhr) {
-                        console.error('Error updating profile:', xhr);
-                        const errorMsg = xhr.responseJSON?.message || xhr.responseJSON?.error || xhr.statusText || 'Unknown error';
-                        const errors = xhr.responseJSON?.errors;
-                        let fullError = `Error: ${errorMsg} (Status: ${xhr.status})`;
-                        if (errors) {
-                            fullError += '\nValidation errors: ' + JSON.stringify(errors);
-                        }
-                        alert(fullError);
-                    }
-                });
-            }
-
-            // Contact Functions
-            function editContact() {
-                const phone = '{{ $resume->user->userProfile->phone ?? '' }}';
-                const email = '{{ $resume->user->email }}';
-                const location = '{{ $resume->user->userProfile->location ?? '' }}';
-
-                document.getElementById('editSidebarTitle').textContent = 'Edit Contact Information';
-                document.getElementById('editSidebarContent').innerHTML =
-                    `<form id="contactForm" onsubmit="saveContact(event)">
-                                                                                                                                                                                                                                    <div class="edit-form-group">
-                                                                                                                                                                                                                                        <label class="edit-form-label">Phone</label>
-                                                                                                                                                                                                                                        <input type="text" class="edit-form-input" id="contact_phone" value="${phone}">
-                                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                                    <div class="edit-form-group">
-                                                                                                                                                                                                                                        <label class="edit-form-label">Email *</label>
-                                                                                                                                                                                                                                        <input type="email" class="edit-form-input" id="contact_email" value="${email}" required>
-                                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                                    <div class="edit-form-group">
-                                                                                                                                                                                                                                        <label class="edit-form-label">Location</label>
-                                                                                                                                                                                                                                        <input type="text" class="edit-form-input" id="contact_location" value="${location}">
-                                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                                    <div class="edit-form-actions">
-                                                                                                                                                                                                                                        <button type="button" class="edit-btn-secondary" onclick="closeEditSidebar()">Cancel</button>
-                                                                                                                                                                                                                                        <button type="submit" class="edit-btn-primary">Update</button>
-                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                </form>`;
-                openEditSidebar();
-            }
-
-            function saveContact(event) {
-                event.preventDefault();
-
-                const data = {
-                    _token: csrfToken,
-                    phone: document.getElementById('contact_phone').value,
-                    email: document.getElementById('contact_email').value,
-                    location: document.getElementById('contact_location').value
-                };
-
-                console.log('Sending contact update with CSRF token:', csrfToken);
-
-                $.ajax({
-                    url: `/admin/resumes/{{ $resume->id }}/contact`,
-                    method: 'PUT',
-                    data: data,
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    success: function (response) {
-                        console.log('Contact updated successfully:', response);
-                        location.reload();
-                    },
-                    error: function (xhr) {
-                        console.error('Error updating contact:', xhr);
-                        const errorMsg = xhr.responseJSON?.message || xhr.statusText ||
-                            'Error updating contact information';
-                        alert('Error: ' + errorMsg + ' (Status: ' + xhr.status + ')');
-                    }
-                });
-            }
-
-            // About Me Functions
-            function editAboutMe() {
-                const summary = `{{ $resume->data['summary'] ?? ($resume->user->userProfile->summary ?? '') }}`;
-
-                document.getElementById('editSidebarTitle').textContent = 'Edit About Me';
-                document.getElementById('editSidebarContent').innerHTML =
-                    `
-                                                                                                                                                                                                                                                                                                                                                                    <form id="aboutForm" onsubmit="saveAboutMe(event)">
-                                                                                                                                                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                                                                                                                                                            <label class="edit-form-label">About Me / Summary</label>
-                                                                                                                                                                                                                                                                                                                                                                            <textarea class="edit-form-textarea" id="about_summary" rows="8">${summary}</textarea>
-                                                                                                                                                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                                                                                                                                                        <div class="edit-form-actions">
-                                                                                                                                                                                                                                                                                                                                                                            <button type="button" class="edit-btn-secondary" onclick="closeEditSidebar()">Cancel</button>
-                                                                                                                                                                                                                                                                                                                                                                            <button type="submit" class="edit-btn-primary">Update</button>
-                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                    </form>
-                                                                                                                                                                                                                                                                                                                                                                `;
-                openEditSidebar();
-            }
-
-            function saveAboutMe(event) {
-                event.preventDefault();
-
-                const data = {
-                    _token: csrfToken,
-                    summary: document.getElementById('about_summary').value
-                };
-
-                console.log('Saving About Me:', data);
-
-                $.ajax({
-                    url: `/admin/resumes/{{ $resume->id }}/about`,
-                    method: 'PUT',
-                    data: data,
-                    success: function (response) {
-                        console.log('About Me saved successfully:', response);
-                        location.reload();
-                    },
-                    error: function (xhr) {
-                        console.error('Error updating about me:', xhr);
-                        const errorMsg = xhr.responseJSON?.message || xhr.responseJSON?.error || xhr.statusText ||
-                            'Unknown error';
-                        const errors = xhr.responseJSON?.errors;
-                        let fullError = `Error: ${errorMsg} (Status: ${xhr.status})`;
-                        if (errors) {
-                            fullError += '\nValidation errors: ' + JSON.stringify(errors);
-                        }
-                        alert(fullError);
-                    }
-                });
-            }
-
-            // Reference Functions
-            function addReference() {
-                document.getElementById('editSidebarTitle').textContent = 'Add Reference';
-                document.getElementById('editSidebarContent').innerHTML =
-                    `
-                                                                                                                                                                                                                                                                                                                                                                    <form id="referenceForm" onsubmit="saveReference(event)">
-                                                                                                                                                                                                                                                                                                                                                                        <input type="hidden" id="ref_action" value="add">
-                                                                                                                                                                                                                                                                                                                                                                        <input type="hidden" id="ref_id" value="">
-
-                                                                                                                                                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                                                                                                                                                            <label class="edit-form-label">Name *</label>
-                                                                                                                                                                                                                                                                                                                                                                            <input type="text" class="edit-form-input" id="ref_name" required>
-                                                                                                                                                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                                                                                                                                                            <label class="edit-form-label">Company</label>
-                                                                                                                                                                                                                                                                                                                                                                            <input type="text" class="edit-form-input" id="ref_company">
-                                                                                                                                                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                                                                                                                                                            <label class="edit-form-label">Title/Position *</label>
-                                                                                                                                                                                                                                                                                                                                                                            <input type="text" class="edit-form-input" id="ref_title" required>
-                                                                                                                                                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                                                                                                                                                            <label class="edit-form-label">Phone</label>
-                                                                                                                                                                                                                                                                                                                                                                            <input type="text" class="edit-form-input" id="ref_phone">
-                                                                                                                                                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                                                                                                                                                            <label class="edit-form-label">Email</label>
-                                                                                                                                                                                                                                                                                                                                                                            <input type="email" class="edit-form-input" id="ref_email">
-                                                                                                                                                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                                                                                                                                                        <div class="edit-form-actions">
-                                                                                                                                                                                                                                                                                                                                                                            <button type="button" class="edit-btn-secondary" onclick="closeEditSidebar()">Cancel</button>
-                                                                                                                                                                                                                                                                                                                                                                            <button type="submit" class="edit-btn-primary">Save</button>
-                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                    </form>
-                                                                                                                                                                                                                                                                                                                                                                `;
-                openEditSidebar();
-            }
-
-            function editReference(id, name, title, company, phone, email) {
-                document.getElementById('editSidebarTitle').textContent = 'Edit Reference';
-                document.getElementById('editSidebarContent').innerHTML =
-                    `
-                                                                                                                                                                                                                                                                                                                                                                    <form id="referenceForm" onsubmit="saveReference(event)">
-                                                                                                                                                                                                                                                                                                                                                                        <input type="hidden" id="ref_action" value="edit">
-                                                                                                                                                                                                                                                                                                                                                                        <input type="hidden" id="ref_id" value="${id}">
-
-                                                                                                                                                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                                                                                                                                                            <label class="edit-form-label">Name *</label>
-                                                                                                                                                                                                                                                                                                                                                                            <input type="text" class="edit-form-input" id="ref_name" value="${name}" required>
-                                                                                                                                                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                                                                                                                                                            <label class="edit-form-label">Title/Position *</label>
-                                                                                                                                                                                                                                                                                                                                                                            <input type="text" class="edit-form-input" id="ref_title" value="${title}" required>
-                                                                                                                                                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                                                                                                                                                            <label class="edit-form-label">Company</label>
-                                                                                                                                                                                                                                                                                                                                                                            <input type="text" class="edit-form-input" id="ref_company" value="${company}">
-                                                                                                                                                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                                                                                                                                                            <label class="edit-form-label">Phone</label>
-                                                                                                                                                                                                                                                                                                                                                                            <input type="text" class="edit-form-input" id="ref_phone" value="${phone}">
-                                                                                                                                                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                                                                                                                                                        <div class="edit-form-group">
-                                                                                                                                                                                                                                                                                                                                                                            <label class="edit-form-label">Email</label>
-                                                                                                                                                                                                                                                                                                                                                                            <input type="email" class="edit-form-input" id="ref_email" value="${email}">
-                                                                                                                                                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                                                                                                                                                        <div class="edit-form-actions">
-                                                                                                                                                                                                                                                                                                                                                                            <button type="button" class="edit-btn-secondary" onclick="closeEditSidebar()">Cancel</button>
-                                                                                                                                                                                                                                                                                                                                                                            <button type="submit" class="edit-btn-primary">Update</button>
-                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                    </form>
-                                                                                                                                                                                                                                                                                                                                                                `;
-                openEditSidebar();
-            }
-
-            function saveReference(event) {
-                event.preventDefault();
-                const action = document.getElementById('ref_action').value;
-                const id = document.getElementById('ref_id').value;
-
-                const data = {
-                    _token: csrfToken,
-                    name: document.getElementById('ref_name').value,
-                    title: document.getElementById('ref_title').value,
-                    company: document.getElementById('ref_company').value,
-                    phone: document.getElementById('ref_phone').value,
-                    email: document.getElementById('ref_email').value
-                };
-
-                if (action === 'add') {
-                    $.post(`/admin/resumes/{{ $resume->id }}/references`, data, function (response) {
-                        location.reload();
-                    }).fail(function () {
-                        alert('Error adding reference');
-                    });
-                } else {
-                    $.ajax({
-                        url: `/admin/resumes/{{ $resume->id }}/references/${id}`,
-                        method: 'PUT',
-                        data: data,
-                        success: function (response) {
-                            location.reload();
-                        },
-                        error: function () {
-                            alert('Error updating reference');
-                        }
-                    });
-                }
-            }
-
-            function deleteReference(id) {
-                if (confirm('Are you sure you want to delete this reference?')) {
-                    $.ajax({
-                        url: `/admin/resumes/{{ $resume->id }}/references/${id}`,
-                        method: 'DELETE',
-                        success: function (response) {
-                            location.reload();
-                        },
-                        error: function () {
-                            alert('Error deleting reference');
-                        }
-                    });
-                }
-            }
-        </script>
+        @push('scripts')
+            {{-- <!-- jQuery (required for legacy functions, can be removed later if fully migrated) -->
+            <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script> --}}
+
+            <!-- Common Resume Editor Script -->
+            <script src="{{ asset('backend/js/resume-editor.js') }}"></script>
+
+            <!-- Initialize Resume Editor -->
+            <script>
+                console.log('✅ Template Free loaded. All CRUD functions available via resumeEditor object.');
+            </script>
+        @endpush
     @endif
 @endsection
