@@ -201,4 +201,9 @@ class Resume extends Model
     {
         return $this->hasMany(ResumePassion::class);
     }
+
+    public function highlights()
+    {
+        return $this->hasMany(ResumeHighlight::class)->orderBy('order');
+    }
 }

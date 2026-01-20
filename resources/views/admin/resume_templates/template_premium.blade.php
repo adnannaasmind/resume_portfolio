@@ -754,15 +754,47 @@
                         </div>
                     </div>
 
+                    <!-- Highlights / Additional Info -->
                     <div class="section">
+                        <div class="section-header">
+                            <div class="section-title">HIGHLIGHTS</div>
+                            @if($isEditMode ?? false)
+                                <button class="edit-mode-btn" onclick="resumeEditor.addHighlight()">
+                                    <i class="fas fa-plus"></i> Add
+                                </button>
+                            @endif
+                        </div>
+
                         <div class="section-content" style="font-size: 10px; line-height: 1.7;">
-                            <strong>Effective Buyer-Client Relationship:</strong> Adept at forging lasting and meaningful
-                            business relationships by leveraging my ability to ensure client happiness, quick
-                            problem-solving, and consistent follow-up.
-                            <br><br>
-                            <strong>Strategic Vision:</strong> Able to identify growth opportunities through market
-                            analysis, drawing sound from the Institute of Sales Management, Royal Economics Society, and
-                            Institute of Directors along with 9 years of experience.
+                            @if(isset($resume->highlights) && $resume->highlights && $resume->highlights->count() > 0)
+                                @foreach($resume->highlights as $highlight)
+                                    <div class="highlight-item" style="margin-bottom: 12px; position: relative; padding-right: 60px;"
+                                         data-highlight-id="{{ $highlight->id }}"
+                                         data-highlight-title="{{ $highlight->title }}"
+                                         data-highlight-description="{{ $highlight->description }}">
+                                    @if($isEditMode ?? false)
+                                        <div class="item-actions" style="position: absolute; right: 0; top: 0;">
+                                            <button class="btn btn-info btn-sm" onclick="resumeEditor.editHighlight({{ $highlight->id }})">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-danger btn-sm" onclick="resumeEditor.deleteHighlight({{ $highlight->id }})">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                        @endif
+                                        <strong>{{ $highlight->title }}:</strong> {{ $highlight->description }}
+                                        @if(!$loop->last)
+                                            <br><br>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="highlight-item" style="margin-bottom: 12px;">
+                                    <strong>Effective Buyer-Client Relationship:</strong> Adept at forging lasting and meaningful business relationships by leveraging my ability to ensure client happiness, quick problem-solving, and consistent follow-up.
+                                    <br><br>
+                                    <strong>Strategic Vision:</strong> Able to identify growth opportunities through market analysis, drawing sound from the Institute of Sales Management, Royal Economics Society, and Institute of Directors along with 9 years of experience.
+                                </div>
+                            @endif
                         </div>
                     </div>
 

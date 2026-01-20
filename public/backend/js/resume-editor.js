@@ -1423,6 +1423,129 @@ class ResumeEditor {
             console.error('Error deleting passion:', error);
         }
     }
+
+    // ============================================
+    // HIGHLIGHTS SECTION
+    // ============================================
+
+    /**
+     * Add new highlight
+     */
+    addHighlight() {
+        const form = `
+            <form id="highlightForm">
+                <div class="edit-form-group">
+                    <label class="edit-form-label">Title *</label>
+                    <input type="text" name="title" class="edit-form-input" required
+                           placeholder="e.g., Strategic Vision, Client Relations">
+                </div>
+
+                <div class="edit-form-group">
+                    <label class="edit-form-label">Description *</label>
+                    <textarea name="description" class="edit-form-textarea" required
+                              placeholder="Describe this highlight in detail..."
+                              rows="4"></textarea>
+                </div>
+
+                <div class="edit-form-actions">
+                    <button type="button" class="edit-btn-secondary" onclick="resumeEditor.closeSidebar()">Cancel</button>
+                    <button type="submit" class="edit-btn-primary">Add Highlight</button>
+                </div>
+            </form>
+        `;
+
+        this.openSidebar('Add Highlight', form);
+
+        document.getElementById('highlightForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.saveHighlight(new FormData(e.target));
+        });
+    }
+
+    /**
+     * Edit existing highlight
+     */
+    editHighlight(highlightId) {
+        const highlightElement = document.querySelector(`[data-highlight-id="${highlightId}"]`);
+        if (!highlightElement) return;
+
+        const highlightData = {
+            title: highlightElement.dataset.highlightTitle,
+            description: highlightElement.dataset.highlightDescription
+        };
+
+        const form = `
+            <form id="highlightForm">
+                <div class="edit-form-group">
+                    <label class="edit-form-label">Title *</label>
+                    <input type="text" name="title" class="edit-form-input" required
+                           value="${this.escapeHtml(highlightData.title)}"
+                           placeholder="e.g., Strategic Vision, Client Relations">
+                </div>
+
+                <div class="edit-form-group">
+                    <label class="edit-form-label">Description *</label>
+                    <textarea name="description" class="edit-form-textarea" required
+                              placeholder="Describe this highlight in detail..."
+                              rows="4">${this.escapeHtml(highlightData.description)}</textarea>
+                </div>
+
+                <div class="edit-form-actions">
+                    <button type="button" class="edit-btn-secondary" onclick="resumeEditor.closeSidebar()">Cancel</button>
+                    <button type="submit" class="edit-btn-primary">Update Highlight</button>
+                </div>
+            </form>
+        `;
+
+        this.openSidebar('Edit Highlight', form);
+
+        document.getElementById('highlightForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.saveHighlight(new FormData(e.target), highlightId);
+        });
+    }
+
+    /**
+     * Save highlight (create or update)
+     */
+    async saveHighlight(formData, highlightId = null) {
+        const data = {
+            title: formData.get('title'),
+            description: formData.get('description')
+        };
+
+        try {
+            const method = highlightId ? 'PUT' : 'POST';
+            const url = highlightId
+                ? `${this.baseUrl}/${this.resumeId}/highlights/${highlightId}`
+                : `${this.baseUrl}/${this.resumeId}/highlights`;
+
+            const result = await this.makeRequest(url, method, data);
+            this.showNotification(result.message || 'Highlight saved successfully', 'success');
+            this.closeSidebar();
+            setTimeout(() => window.location.reload(), 1000);
+        } catch (error) {
+            console.error('Error saving highlight:', error);
+        }
+    }
+
+    /**
+     * Delete highlight
+     */
+    async deleteHighlight(highlightId) {
+        if (!confirm('Are you sure you want to delete this highlight?')) {
+            return;
+        }
+
+        try {
+            const url = `${this.baseUrl}/${this.resumeId}/highlights/${highlightId}`;
+            const result = await this.makeRequest(url, 'DELETE');
+            this.showNotification(result.message || 'Highlight deleted successfully', 'success');
+            setTimeout(() => window.location.reload(), 1000);
+        } catch (error) {
+            console.error('Error deleting highlight:', error);
+        }
+    }
 }
 
 // Initialize global resume editor instance

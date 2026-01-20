@@ -57,7 +57,7 @@ class TemplateController extends Controller
 
         // Get demo resume for this template
         $resume = Resume::where('resume_template_id', $template->id)
-            ->with(['user', 'user.userProfile', 'experiences', 'educations', 'skills', 'projects'])
+            ->with(['user', 'user.userProfile', 'experiences', 'educations', 'skills', 'projects', 'achievements', 'passions', 'highlights'])
             ->first();
 
         // If no demo resume exists, create a dummy one with sample data
@@ -78,7 +78,7 @@ class TemplateController extends Controller
     {
         // Get demo resume for preview
         $resume = Resume::where('resume_template_id', $template->id)
-            ->with(['user', 'user.userProfile', 'experiences', 'educations', 'skills', 'projects'])
+            ->with(['user', 'user.userProfile', 'experiences', 'educations', 'skills', 'projects', 'achievements', 'passions', 'highlights'])
             ->first();
 
         $isRealResume = $resume !== null;
@@ -124,7 +124,7 @@ class TemplateController extends Controller
     {
         // Get demo resume for this template
         $resume = Resume::where('resume_template_id', $template->id)
-            ->with(['user', 'user.userProfile', 'experiences', 'educations', 'skills', 'projects'])
+            ->with(['user', 'user.userProfile', 'experiences', 'educations', 'skills', 'projects', 'achievements', 'passions', 'highlights'])
             ->first();
 
         // If no demo resume exists, create a dummy one with sample data

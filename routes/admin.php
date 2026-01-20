@@ -90,6 +90,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::post('passions', [ResumeController::class, 'storePassion'])->name('passions.store');
         Route::put('passions/{passion}', [ResumeController::class, 'updatePassion'])->name('passions.update');
         Route::delete('passions/{passion}', [ResumeController::class, 'deletePassion'])->name('passions.delete');
+
+        // Highlights
+        Route::post('highlights', [ResumeController::class, 'storeHighlight'])->name('highlights.store');
+        Route::put('highlights/{highlight}', [ResumeController::class, 'updateHighlight'])->name('highlights.update');
+        Route::delete('highlights/{highlight}', [ResumeController::class, 'deleteHighlight'])->name('highlights.delete');
     });
 
 

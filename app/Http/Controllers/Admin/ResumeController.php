@@ -7,6 +7,7 @@ use App\Models\Resume;
 use App\Models\ResumeAchievement;
 use App\Models\ResumeEducation;
 use App\Models\ResumeExperience;
+use App\Models\ResumeHighlight;
 use App\Models\ResumePassion;
 use App\Models\ResumeProject;
 use App\Models\ResumeSkill;
@@ -52,7 +53,7 @@ class ResumeController extends Controller
 
     public function show(Resume $resume)
     {
-        $resume->load(['user', 'user.userProfile', 'template', 'experiences', 'educations', 'skills', 'projects', 'achievements', 'passions']);
+        $resume->load(['user', 'user.userProfile', 'template', 'experiences', 'educations', 'skills', 'projects', 'achievements', 'passions', 'highlights']);
 
         // If template has blade_file specified, use that, otherwise use default
         if ($resume->template && $resume->template->blade_file) {
@@ -65,7 +66,7 @@ class ResumeController extends Controller
 
     public function edit(Resume $resume)
     {
-        $resume->load(['user', 'user.userProfile', 'template', 'experiences', 'educations', 'skills', 'projects', 'achievements', 'passions']);
+        $resume->load(['user', 'user.userProfile', 'template', 'experiences', 'educations', 'skills', 'projects', 'achievements', 'passions', 'highlights']);
 
         // If template has blade_file, render that template for editing
         if ($resume->template && $resume->template->blade_file) {
@@ -640,5 +641,37 @@ class ResumeController extends Controller
         $passion->delete();
 
         return response()->json(['success' => true, 'message' => 'Passion deleted successfully']);
+    }
+
+    // Highlight Methods
+    public function storeHighlight(Request $request, Resume $resume)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+        ]);
+
+        $resume->highlights()->create($validated);
+
+        return response()->json(['success' => true, 'message' => 'Highlight added successfully']);
+    }
+
+    public function updateHighlight(Request $request, Resume $resume, ResumeHighlight $highlight)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+        ]);
+
+        $highlight->update($validated);
+
+        return response()->json(['success' => true, 'message' => 'Highlight updated successfully']);
+    }
+
+    public function deleteHighlight(Resume $resume, ResumeHighlight $highlight)
+    {
+        $highlight->delete();
+
+        return response()->json(['success' => true, 'message' => 'Highlight deleted successfully']);
     }
 }
