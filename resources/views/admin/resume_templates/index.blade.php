@@ -46,7 +46,8 @@
                                                 <a href="{{ route('admin.templates.show', $template) }}">
                                                     @if($template->blade_file)
                                                         <div class="template-preview-wrapper">
-                                                            <iframe src="{{ route('admin.templates.preview', $template) }}"
+                                                            <iframe
+                                                                src="{{ route('admin.templates.preview', $template) }}?v={{ time() }}"
                                                                 class="template-preview-iframe" scrolling="no">
                                                             </iframe>
                                                         </div>

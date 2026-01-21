@@ -59,7 +59,8 @@
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                     <a href="{{ route('admin.resumes.download', $resume) }}"
-                                                        class="btn btn-sm btn-success" title="{{ __('Download PDF') }}">
+                                                        class="btn btn-sm btn-success" title="{{ __('Download PDF') }}"
+                                                        target="_blank">
                                                         <i class="fas fa-download"></i>
                                                     </a>
                                                     <form action="{{ route('admin.resumes.destroy', $resume) }}" method="POST"

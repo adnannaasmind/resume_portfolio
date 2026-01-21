@@ -132,13 +132,25 @@ class TemplateController extends Controller
             $resume = $this->getDummyResume($template->id);
         }
 
-        // Render the template blade file
+        // Render the template blade file with preview mode enabled
         if ($template->blade_file) {
-            return view($template->blade_file, compact('resume'));
+            return view($template->blade_file, [
+                'resume' => $resume,
+                'template' => $template,
+                'isPreviewMode' => true, // Skip admin layout for iframe preview
+                'isEditMode' => false,
+                'isPdfMode' => false
+            ]);
         }
 
         // Fallback if no blade file
-        return view('admin.resume_templates.template_free', compact('resume'));
+        return view('admin.resume_templates.template_free', [
+            'resume' => $resume,
+            'template' => $template,
+            'isPreviewMode' => true,
+            'isEditMode' => false,
+            'isPdfMode' => false
+        ]);
     }
 
     public function useTemplate(Request $request, ResumeTemplate $template): RedirectResponse

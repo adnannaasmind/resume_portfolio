@@ -413,19 +413,39 @@ class ResumeController extends Controller
             \Log::info('Update Profile called', [
                 'resume_id' => $resume->id,
                 'user_id' => auth()->id(),
-                'data' => $request->all()
+                'data' => $request->except('profile_image')
             ]);
 
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'title' => 'required|string|max:255',
+                'job_title' => 'required|string|max:255',
+                'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             // Update user name
             $resume->user->update(['name' => $validated['name']]);
 
             // Update resume title
-            $resume->update(['title' => $validated['title']]);
+            $resume->update(['title' => $validated['job_title']]);
+
+            // Handle profile image upload
+            if ($request->hasFile('profile_image')) {
+                $image = $request->file('profile_image');
+                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $imagePath = $image->storeAs('profile_images', $imageName, 'public');
+
+                // Delete old image if exists
+                $resumeData = $resume->data ?? [];
+                if (isset($resumeData['profile_image']) && \Storage::disk('public')->exists($resumeData['profile_image'])) {
+                    \Storage::disk('public')->delete($resumeData['profile_image']);
+                }
+
+                // Update resume data with new image path
+                $resumeData['profile_image'] = $imagePath;
+                $resume->update(['data' => $resumeData]);
+
+                \Log::info('Profile image uploaded successfully', ['path' => $imagePath]);
+            }
 
             \Log::info('Profile updated successfully');
 
@@ -682,50 +702,81 @@ class ResumeController extends Controller
      */
     public function download(Resume $resume)
     {
-        // Load all relationships
-        $resume->load([
-            'user',
-            'user.userProfile',
-            'template',
-            'experiences',
-            'educations',
-            'skills',
-            'projects',
-            'achievements',
-            'passions',
-            'highlights'
-        ]);
-
-        // Get the template blade file
-        $templateFile = $resume->template && $resume->template->blade_file
-            ? $resume->template->blade_file
-            : 'admin.resume_templates.template_free';
-
-        // Render the template HTML
-        $html = view($templateFile, [
-            'resume' => $resume,
-            'template' => $resume->template,
-            'isEditMode' => false,
-            'isPdfMode' => true
-        ])->render();
-
-        // Generate PDF using dompdf
-        $pdf = Pdf::loadHTML($html)
-            ->setPaper('a4', 'portrait')
-            ->setOptions([
-                'isHtml5ParserEnabled' => true,
-                'isRemoteEnabled' => true,
-                'defaultFont' => 'sans-serif',
-                'margin_top' => 0,
-                'margin_right' => 0,
-                'margin_bottom' => 0,
-                'margin_left' => 0,
+        try {
+            \Log::info('Starting PDF download', [
+                'resume_id' => $resume->id,
+                'user_id' => auth()->id()
             ]);
 
-        // Generate filename
-        $filename = Str::slug($resume->title ?: 'resume') . '-' . date('Y-m-d') . '.pdf';
+            // Load all relationships
+            $resume->load([
+                'user',
+                'user.userProfile',
+                'template',
+                'experiences',
+                'educations',
+                'skills',
+                'projects',
+                'achievements',
+                'passions',
+                'highlights'
+            ]);
 
-        // Download PDF
-        return $pdf->download($filename);
+            // Get the template blade file
+            $templateFile = $resume->template && $resume->template->blade_file
+                ? $resume->template->blade_file
+                : 'admin.resume_templates.template_free';
+
+            \Log::info('Using template', ['template' => $templateFile]);
+
+            // Render the template HTML
+            $html = view($templateFile, [
+                'resume' => $resume,
+                'template' => $resume->template,
+                'isEditMode' => false,
+                'isPdfMode' => true
+            ])->render();
+
+            \Log::info('HTML rendered', ['html_length' => strlen($html)]);
+
+            // Generate PDF using dompdf
+            $pdf = Pdf::loadHTML($html)
+                ->setPaper('a4', 'portrait')
+                ->setOptions([
+                    'isHtml5ParserEnabled' => true,
+                    'isRemoteEnabled' => false,
+                    'defaultFont' => 'sans-serif',
+                    'margin_top' => 0,
+                    'margin_right' => 0,
+                    'margin_bottom' => 0,
+                    'margin_left' => 0,
+                    'dpi' => 96,
+                    'enable_php' => false,
+                    'enable_javascript' => false,
+                    'enable_html5_parser' => true,
+                ]);
+
+            \Log::info('PDF generated successfully');
+
+            // Generate filename
+            $filename = Str::slug($resume->title ?: 'resume') . '-' . date('Y-m-d') . '.pdf';
+
+            \Log::info('Downloading PDF', ['filename' => $filename]);
+
+            // Download PDF
+            return $pdf->download($filename);
+        } catch (\Exception $e) {
+            \Log::error('Error generating PDF', [
+                'resume_id' => $resume->id ?? null,
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            // Return error as plain text instead of redirecting
+            return response('Failed to generate PDF: ' . $e->getMessage() . ' (Line: ' . $e->getLine() . ')', 500)
+                ->header('Content-Type', 'text/plain');
+        }
     }
 }

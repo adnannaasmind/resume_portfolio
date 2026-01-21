@@ -104,6 +104,21 @@ class ResumeEditor {
     }
 
     /**
+     * Escape HTML to prevent XSS attacks
+     */
+    escapeHtml(text) {
+        if (!text) return '';
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.toString().replace(/[&<>"']/g, m => map[m]);
+    }
+
+    /**
      * Open sidebar with content
      */
     openSidebar(title, content) {
@@ -766,20 +781,33 @@ class ResumeEditor {
      */
 
     /**
-     * Edit profile information
+     * Edit complete profile (image, name, job title) - All in one
      */
     editProfile() {
         // Get current profile data from DOM
         const nameElement = document.querySelector('[data-profile-name]');
         const titleElement = document.querySelector('[data-profile-title]');
+        const profileImg = document.querySelector('.profile-img img');
 
         const profile = {
             name: nameElement?.dataset.profileName || nameElement?.textContent?.trim() || '',
-            job_title: titleElement?.dataset.profileTitle || titleElement?.textContent?.trim() || ''
+            job_title: titleElement?.dataset.profileTitle || titleElement?.textContent?.trim() || '',
+            hasImage: profileImg ? true : false,
+            imageUrl: profileImg?.src || ''
         };
 
         const formHtml = `
-            <form id="profileForm" class="edit-form">
+            <form id="profileForm" class="edit-form" enctype="multipart/form-data">
+                <div class="edit-form-group">
+                    <label class="edit-form-label">Profile Image</label>
+                    ${profile.hasImage ? `
+                        <div style="margin-bottom: 15px; text-align: center;">
+                            <img src="${profile.imageUrl}" alt="Current Profile" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #2196F3;">
+                        </div>
+                    ` : ''}
+                    <input type="file" name="profile_image" class="edit-form-input" accept="image/*">
+                    <small style="display: block; margin-top: 5px; color: #666;">Max 2MB. JPG, PNG, GIF (Optional - leave empty to keep current)</small>
+                </div>
                 <div class="edit-form-group">
                     <label class="edit-form-label">Full Name *</label>
                     <input type="text" name="name" class="edit-form-input" value="${profile.name}" required>
@@ -797,63 +825,23 @@ class ResumeEditor {
 
         this.openSidebar('Edit Profile', formHtml);
 
-        document.getElementById('profileForm').addEventListener('submit', (e) => {
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            this.saveProfile(new FormData(e.target));
+            await this.saveProfile(new FormData(e.target));
         });
     }
 
     /**
-     * Save profile information
+     * Save complete profile information (image, name, job title)
      */
     async saveProfile(formData) {
-        const data = Object.fromEntries(formData.entries());
-
         try {
             const url = `${this.baseUrl}/${this.resumeId}/profile`;
-            const result = await this.makeRequest(url, 'PUT', data);
-            this.showNotification(result.message || 'Profile updated successfully', 'success');
-            this.closeSidebar();
-            setTimeout(() => window.location.reload(), 1000);
-        } catch (error) {
-            console.error('Error saving profile:', error);
-        }
-    }
 
-    /**
-     * Update profile image
-     */
-    editProfileImage() {
-        const formHtml = `
-            <form id="profileImageForm" class="edit-form" enctype="multipart/form-data">
-                <div class="edit-form-group">
-                    <label class="edit-form-label">Profile Image</label>
-                    <input type="file" name="profile_image" class="edit-form-input" accept="image/*" required>
-                    <small>Max size: 2MB. Supported formats: JPG, PNG, GIF</small>
-                </div>
-                <div class="edit-form-actions">
-                    <button type="submit" class="edit-btn-primary">Upload Image</button>
-                    <button type="button" class="edit-btn-secondary" onclick="resumeEditor.closeSidebar()">Cancel</button>
-                </div>
-            </form>
-        `;
+            // Add _method field for Laravel method spoofing (to support PUT with file upload)
+            formData.append('_method', 'PUT');
 
-        this.openSidebar('Update Profile Image', formHtml);
-
-        document.getElementById('profileImageForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await this.saveProfileImage(new FormData(e.target));
-        });
-    }
-
-    /**
-     * Save profile image
-     */
-    async saveProfileImage(formData) {
-        try {
-            const url = `${this.baseUrl}/${this.resumeId}/profile-image`;
-
-            // Use regular fetch for file upload (not JSON)
+            // Use fetch for file upload with FormData
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -866,16 +854,33 @@ class ResumeEditor {
             const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(result.message || 'Image upload failed');
+                throw new Error(result.message || 'Profile update failed');
             }
 
-            this.showNotification(result.message || 'Profile image updated successfully', 'success');
+            this.showNotification(result.message || 'Profile updated successfully', 'success');
             this.closeSidebar();
             setTimeout(() => window.location.reload(), 1000);
         } catch (error) {
-            console.error('Error uploading profile image:', error);
+            console.error('Error saving profile:', error);
             this.showNotification('Error: ' + error.message, 'error');
         }
+    }
+
+    /**
+     * Update profile image - Redirects to comprehensive profile edit
+     * @deprecated Use editProfile() for complete profile editing
+     */
+    editProfileImage() {
+        // Redirect to comprehensive profile edit function
+        this.editProfile();
+    }
+
+    /**
+     * @deprecated No longer used - kept for backward compatibility
+     */
+    async saveProfileImage(formData) {
+        // Redirect to main saveProfile function
+        return await this.saveProfile(formData);
     }
 
     /**
@@ -1315,11 +1320,6 @@ class ResumeEditor {
                     <input type="text" name="title" class="edit-form-input" required placeholder="e.g., Music, Travel, Photography">
                 </div>
                 <div class="edit-form-group">
-                    <label class="edit-form-label">Icon (FontAwesome class)</label>
-                    <input type="text" name="icon" class="edit-form-input" placeholder="e.g., fa-music, fa-camera">
-                    <small style="color: #666; font-size: 10px;">Visit fontawesome.com for icon names</small>
-                </div>
-                <div class="edit-form-group">
                     <label class="edit-form-label">Description</label>
                     <textarea name="description" class="edit-form-textarea" rows="3"></textarea>
                 </div>
@@ -1360,11 +1360,6 @@ class ResumeEditor {
                 <div class="edit-form-group">
                     <label class="edit-form-label">Title *</label>
                     <input type="text" name="title" class="edit-form-input" value="${title}" required>
-                </div>
-                <div class="edit-form-group">
-                    <label class="edit-form-label">Icon (FontAwesome class)</label>
-                    <input type="text" name="icon" class="edit-form-input" value="${icon}" placeholder="e.g., fa-music, fa-camera">
-                    <small style="color: #666; font-size: 10px;">Visit fontawesome.com for icon names</small>
                 </div>
                 <div class="edit-form-group">
                     <label class="edit-form-label">Description</label>
