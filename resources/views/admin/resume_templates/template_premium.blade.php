@@ -619,6 +619,18 @@
                     <span data-contact-email="{{ $resume->user->email }}">✉ {{ $resume->user->email }}</span>
                     <span data-contact-location="{{ $resume->user->userProfile->location ?? '' }}">📍
                         {{ $resume->user->userProfile->location ?? 'N/A' }}</span>
+                    @if($resume->user->userProfile->website)
+                    <span data-contact-website="{{ $resume->user->userProfile->website }}">🌐
+                        <a href="{{ $resume->user->userProfile->website }}" target="_blank" style="color: inherit; text-decoration: none;">{{ $resume->user->userProfile->website }}</a></span>
+                    @endif
+                    @if($resume->user->userProfile->linkedin_url)
+                    <span data-contact-linkedin="{{ $resume->user->userProfile->linkedin_url }}">
+                        <a href="{{ $resume->user->userProfile->linkedin_url }}" target="_blank" style="color: inherit; text-decoration: none;">LinkedIn</a></span>
+                    @endif
+                    @if($resume->user->userProfile->github_url)
+                    <span data-contact-github="{{ $resume->user->userProfile->github_url }}">
+                        <a href="{{ $resume->user->userProfile->github_url }}" target="_blank" style="color: inherit; text-decoration: none;">GitHub</a></span>
+                    @endif
                     @if($isEditMode ?? false)
                         <svg class="edit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             onclick="resumeEditor.editContact()"
@@ -692,8 +704,8 @@
                         <div class="experience-item" data-experience-id="{{ $experience->id }}"
                             data-title="{{ $experience->title }}" data-company="{{ $experience->company }}"
                             data-location="{{ $experience->location ?? '' }}"
-                            data-start-date="{{ $experience->start_date }}"
-                            data-end-date="{{ $experience->end_date ?? '' }}"
+                            data-start-date="{{ $experience->start_date ? (is_string($experience->start_date) ? $experience->start_date : $experience->start_date->format('Y-m-d')) : '' }}"
+                            data-end-date="{{ $experience->end_date ? (is_string($experience->end_date) ? $experience->end_date : $experience->end_date->format('Y-m-d')) : '' }}"
                             data-is-current="{{ $experience->is_current ? 'true' : 'false' }}"
                             data-description="{{ $experience->description ?? '' }}">
                             @if($isEditMode ?? false)
@@ -713,6 +725,9 @@
                                 <div>
                                     <div class="experience-title">{{ $experience->title }}</div>
                                     <div class="experience-company">{{ $experience->company }}</div>
+                                    @if($experience->location)
+                                        <div class="experience-location">{{ $experience->location }}</div>
+                                    @endif
                                     <div class="experience-date">
                                         {{ date('m/Y', strtotime($experience->start_date)) }} -
                                         {{ $experience->is_current ? 'Present' : date('m/Y', strtotime($experience->end_date)) }}
@@ -739,7 +754,8 @@
                     @foreach($resume->educations as $education)
                         <div class="education-item" data-education-id="{{ $education->id }}"
                             data-degree="{{ $education->degree }}" data-institution="{{ $education->institution }}"
-                            data-start-date="{{ $education->start_date }}" data-end-date="{{ $education->end_date ?? '' }}"
+                            data-start-date="{{ $education->start_date ? (is_string($education->start_date) ? $education->start_date : $education->start_date->format('Y-m-d')) : '' }}"
+                            data-end-date="{{ $education->end_date ? (is_string($education->end_date) ? $education->end_date : $education->end_date->format('Y-m-d')) : '' }}"
                             data-description="{{ $education->description ?? '' }}">
                             @if($isEditMode ?? false)
                                 <div class="item-actions">
